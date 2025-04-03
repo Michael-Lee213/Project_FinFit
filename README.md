@@ -1,6 +1,6 @@
 <small>
   
-## ■ 프로젝트명: FinFit
+# ■ 프로젝트명: FinFit
 
 <img src="https://github.com/Michael-Lee213/Project_FinFit/raw/main/FinFit-Chrome2025-04-0213-57-31-ezgif.com-video-to-gif-converter.gif.gif" width="720"/>
 
