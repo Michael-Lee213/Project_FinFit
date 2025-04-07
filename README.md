@@ -100,7 +100,7 @@ FinFit은 건강 검진 데이터와 AI 예측 모델을 활용하여 사용자�
 
 ## ■  프로젝트 진행 관리 
 
-<img src="https://raw.githubusercontent.com/Michael-Lee213/finfit/main/static/images/사용자흐름도(최종).png" alt="FinFit 사용자 흐름도" width="700">
+![image](https://github.com/user-attachments/assets/7a16587a-5eb2-4be4-bfa9-fa67d59f96f1)
 
 ## ■ Stacks 
 
