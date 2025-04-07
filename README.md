@@ -54,7 +54,7 @@ FinFit은 건강 검진 데이터와 AI 예측 모델을 활용하여 사용자�
   <tr>
     <td style="width: 20%; padding: 10px; vertical-align: middle;">
       <div>
-        <img src="image.png" alt="이한세" width="160" height="200"><br><br>
+        <img src="C:\project\finfit\static\images\image.png" alt="이한세" width="160" height="200"><br><br>
         <strong>이한세 (Michael)</strong><br>
         <em style="color:#f0a500;"># Squat Analysis</em>
       </div>
