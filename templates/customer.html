@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>건강 정보 입력</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <style>
+        /* 🔵 네비게이션 바 스타일 (상단 고정 네비게이션 바) */
+        .navbar {
+            padding: 0.75rem 1rem; /* 상하 12px, 좌우 16px 여백 */
+        }
+
+        .navbar .container {
+            max-width: 1140px; /* 네비 안의 최대 너비 제한 */
+            padding-left: 1rem;  /* 좌우 여백 */
+            padding-right: 1rem;
+        }
+
+        .navbar-brand {
+            font-weight: bold; /* 로고 글자 굵게 */
+            font-size: 1.5rem;  /* 로고 크기 */
+        }
+
+        .navbar-nav {
+            gap: 0.75rem; /* 메뉴 간격 */
+        }
+
+        .navbar-nav .nav-link {
+            padding: 0.5rem 1rem; /* 메뉴 항목 여백 */
+            font-size: 16px;
+            font-weight: 500; /* 메뉴 글자 두께 */
+            color: #333 !important; /* 기본 글자 색 */
+            transition: color 0.3s ease; /* 호버 시 부드럽게 */
+            text-align: center;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #007bff !important; /* 마우스 올릴 때 색상 */
+        }
+
+        /* 🔧 반응형: 모바일 화면일 때 메뉴 스타일 */
+        @media (max-width: 991.98px) {
+            .navbar-collapse {
+                background-color: #ffffff; /* 접힌 메뉴 배경 */
+                padding: 1rem 0;           /* 상하 여백 */
+            }
+
+            .navbar-nav {
+                flex-direction: column;    /* 세로 배치 */
+                align-items: center;       /* 가운데 정렬 */
+                gap: 1rem;                 /* 간격 넓힘 */
+            }
+
+            .navbar-toggler {
+                padding: 0.25rem 0.75rem; /* 토글 버튼 여백 */
+            }
+        }
+
+        /* 🌌 전체 페이지 기본 설정 */
+        body {
+            font-family: 'Arial', sans-serif; /* 글꼴 지정 */
+            background-color: #121820;        /* 전체 배경색 (연한 파랑) */
+            color: #333;                      /* 기본 글자 색 */
+            margin: 1rem;
+            padding: 1rem;
+            padding-top: 60px;   
+            text-align: center;
+        }
+
+        .container {
+            max-width: 95%;    /* 전체 너비 제한 */
+            margin: 0 auto;    /* 가운데 정렬 */
+            padding: 0 15px;   /* 좌우 여백 */
+        }
+
+        .form-container {
+  max-width: 750px;
+  margin: 1rem auto;
+  padding: 30px 20px;
+  background-color: rgba(249, 250, 250, 0.95);  /* 80% 불투명 */
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); /* 은은한 그림자 */
+  
+}
+
+
+        h1 {
+            font-size: 1.75rem;       /* 제목 크기 */
+            font-weight: 700;         /* 굵은 글씨 */
+            text-align: center;
+            color: black;           /* 제목 색 */
+            margin-bottom: 20px;      /* 아래 여백 */
+        }
+
+        /* 📐 입력 폼 2열 배치 스타일 */
+        .form-row {
+            display: flex;
+            justify-content: space-between; /* 좌우로 나눔 */
+            gap: 20px;                      /* 두 항목 간 여백 */
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            width: 48%;                      /* 한 줄에 두 개 */
+            display: flex;
+            flex-direction: column;
+        }
+
+/* 라벨 텍스트 */
+.form-group label {
+  color: #222;
+  font-weight: 600;
+}
+
+/* 일반 입력 필드 */
+.form-group input,
+.form-group select {
+  background-color: #f2f3f4;
+  color: #1a1a1a;
+  font-weight: 500;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 10px;
+  font-size: 14px;
+  transition: all 0.25s ease;
+  font-weight: bold;
+}
+.submit-button {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background-color:  #3b3b3b; /* 세련된 블루그린 */
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 16px; 
+}
+
+.submit-button:hover {
+  background-color: #1f1f1f;  
+  transform: scale(1.02);     /* 살짝 튀어나오는 느낌 */
+}
+
+
+        /* 📱 반응형 모바일: 한 줄에 하나씩 정렬 */
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+            }
+            .form-group {
+                width: 100%;
+            }
+        }
+
+/* 필수 입력 강조 */
+input[required],
+select[required] {
+  background-color: whitesmoke;
+  border: 1.5px solid BLACK;
+}
+
+/* 포커스 효과 */
+input:focus,
+select:focus {
+  outline: none;
+  border: 2px solid BLACK;
+  background-color: #ffffff;
+  box-shadow: 0 0 6px rgba(80, 179, 200, 0.3);
+}
+/* placeholder 스타일 */
+input::placeholder {
+  color: #777;
+}
+        /* ✅ 숫자 입력 스핀 버튼 숨기기 (크로스 브라우저 지원) */
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+
+    </style>
+    
+</head>
+<body>
+    <!-- ✅ 네비게이션 바: disease.html에서 복붙 -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
+        <div class="container">
+          <a class="navbar-brand fw-bold" href="{{ url_for('main.main_page') }}">FinFit</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="#">About</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Service</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Contact</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      
+    <div class="form-container">
+        <h1>건강 정보 입력</h1>
+        <form action="{{ url_for('customer.customer_form') }}" method="post">
+
+            <!-- 첫 번째 행 -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="city">시도 선택 (필수)</label>
+                    <select name="city" id="city" required>
+                    <option value="">- 시도 선택 -</option>
+                    <option value="강원">강원</option>
+                    <option value="경기">경기</option>
+                    <option value="경남">경남</option>
+                    <option value="경북">경북</option>
+                    <option value="광주">광주</option>
+                    <option value="대구">대구</option>
+                    <option value="대전">대전</option>
+                    <option value="부산">부산</option>
+                    <option value="서울">서울</option>
+                    <option value="세종시">세종시</option>
+                    <option value="울산">울산</option>
+                    <option value="인천">인천</option>
+                    <option value="전남">전남</option>
+                    <option value="전북">전북</option>
+                    <option value="제주">제주</option>
+                    <option value="충남">충남</option>
+                    <option value="충북">충북</option>
+                </select>
+            </div>
+                <div class="form-group">
+                    <label for="town">시군구 선택 (필수)</label>
+                    <select name="town" id="town" required>
+                        <option value="">- 시군구 선택 -</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 두 번째 행 -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="sex">성별 (필수)</label>
+                    <select name="sex" id="sex" required>
+                        <option value="1">남</option>
+                        <option value="2">여</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="age">나이 (세) (필수)</label>
+                    <input type="number" name="age" id="age" placeholder="예: 20~80" required>
+                </div>
+            </div>
+
+            <!-- 세 번째 행 -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="height">키 (cm) (필수)</label>
+                    <input type="number" name="height" id="height" placeholder="예: 140~200" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="weight">몸무게 (kg) (필수)</label>
+                    <input type="number" name="weight" id="weight" placeholder="예: 30~150" required>
+                </div>
+            </div>
+
+            <!-- 네 번째 행 -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="bmi">BMI (자동 계산 가능)</label>
+                    <input type="number" name="bmi" id="bmi" placeholder="자동 계산 가능" step="0.01" required>
+                </div>
+                <script>
+                    function calculateBMI() {
+                        var height = document.getElementById("height").value;
+                        var weight = document.getElementById("weight").value;
+                        var bmiField = document.getElementById("bmi");
+                
+                        if (height && weight) {
+                            var heightInMeters = height / 100;
+                            var bmi = (weight / (heightInMeters * heightInMeters)).toFixed(2);
+                            bmiField.value = bmi;
+                        }
+                    }
+                
+                    document.getElementById("height").addEventListener("input", calculateBMI);
+                    document.getElementById("weight").addEventListener("input", calculateBMI);
+                </script>
+                <div class="form-group">
+                    <label for="alchol">음주 경험 (필수)</label>
+                    <select name="alchol" id="alchol" required>
+                        <option value="1">없음</option>
+                        <option value="2">있음</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 다섯 번째 행 -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="smoking_history">흡연 여부 (필수)</label>
+                    <select name="smoking_history" id="smoking_history" required>
+                        <option value="1">5갑(100개비) 미만</option>
+                        <option value="2">5갑(100개비) 이상</option>
+                        <option value="3">피운 적 없음</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="chol_ldl">LDL 콜레스테롤 (필수)</label>
+                    <input type="number" name="chol_ldl" id="chol_ldl" placeholder="예: 50~190" required>
+                </div>
+                
+            </div>
+
+            <!-- ✅ 여섯 번째 행 수정: chol_ldl 필드를 필수 입력으로 변경 -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="chol_hdl">HDL 콜레스테롤 (선택)</label>
+                    <input type="number" name="chol_hdl" id="chol_hdl" placeholder="예: 30~90">
+                </div>
+
+                <div class="form-group">
+                    <label for="chol_total">총콜레스테롤 (선택)</label>
+                    <input type="number" name="chol_total" id="chol_total" placeholder="예: 125~350">
+                </div>
+            </div>
+
+            <!-- 일곱 번째 행 -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="chol_tg">중성지방 (선택)</label>
+                    <input type="number" name="chol_tg" id="chol_tg" placeholder="예: 50~500">
+                </div>
+
+                <div class="form-group">
+                    <label for="fasting_blood_sugar">공복 혈당 (선택)</label>
+                    <input type="number" name="fasting_blood_sugar" id="fasting_blood_sugar" placeholder="예: 70~200">
+                </div>
+            </div>
+
+            <!-- ✅ 여덟 번째 행 수정: glycated_hemoglobin, sbp_average 필수로 변경 -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="glycated_hemoglobin">당화혈색소 (필수)</label>
+                    <input type="number" name="glycated_hemoglobin" id="glycated_hemoglobin" placeholder="예: 4.0~14.0" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="sbp_average">수축기 혈압 (필수)</label>
+                    <input type="number" name="sbp_average" id="sbp_average" placeholder="예: 90~180" required>
+                </div>
+            </div>
+
+
+            <!-- 아홉 번째 행 -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="dbp_average">이완기 혈압 (선택)</label>
+                    <input type="number" name="dbp_average" id="dbp_average" placeholder="예: 50~120">
+                </div>
+
+                <div class="form-group">
+                    <label for="cancer_diagnosis_fathers">아버지 암 진단 여부 (선택)</label>
+                    <select name="cancer_diagnosis_fathers" id="cancer_diagnosis_fathers">
+                        <option value="0">없음</option>
+                        <option value="1">있음</option>
+                    </select>
+                </div>
+            </div>
+
+             <!-- 열 번째 행 -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="cancer_diagnosis_mother">어머니 암 진단 여부 (선택)</label>
+                    <select name="cancer_diagnosis_mother" id="cancer_diagnosis_mother">
+                        <option value="0">없음</option>
+                        <option value="1">있음</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="cancer_diagnosis_sibling">형제자매 암 진단 여부 (선택)</label>
+                    <select name="cancer_diagnosis_sibling" id="cancer_diagnosis_sibling">
+                        <option value="0">없음</option>
+                        <option value="1">있음</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 열한 번째 행 -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="white_blood_cell_count">백혈구 수 (10³/μL, 선택 사항):</label>
+                    <input type="number" name="white_blood_cell_count" id="white_blood_cell_count" placeholder="예: 4.0 ~ 10.0">
+                </div>
+
+                <div class="form-group">
+                    <label for="red_blood_cell_count">적혈구 수 (10³/μL, 선택 사항):</label>
+                    <input type="number" name="red_blood_cell_count" id="red_blood_cell_count" placeholder="예: 3.5 ~ 6.0">
+                </div>
+            </div>
+
+            <!-- 열두 번째 행 -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="stress">스트레스 지수 (선택)</label>
+                    <select name="stress" id="stress">
+                        <option value="1">대단히 많이 느낀다</option>
+                        <option value="2">많이 느끼는 편이다</option>
+                        <option value="3">조금 느끼는 편이다</option>
+                        <option value="4">거의 느끼지 않는다</option>
+                    </select>
+                </div>
+            </div>
+            <div style="background-color: #cecfd0; border-radius: 8px; padding: 10px; text-align: center; margin-top: 20px;">
+                <strong style="color: #222;">사용자 데이터를 정확히, 충분히 입력할수록 더 정밀한 예측 결과를 확인하실 수 있습니다.</strong>
+              </div>
+              
+              <button type="submit" class="submit-button">제출하기</button>
+    </form>
+
+    <script>
+        $(document).ready(function () {
+            // 시도와 해당 시군구 데이터 설정
+            var sigunguData = {
+                "강원": ["강릉시", "고성군", "동해시", "삼척시", "속초시", "양구군", "양양군", "영월군", "원주시", "정선군", "철원군", "춘천시", "태백시", "평창군", "홍천군", "화천군", "횡성군"],
+                "경기": ["가평군", "고양덕양구", "고양일산동구", "고양일산서구", "과천시", "광명시", "광주시", "구리시", "군포시", "김포시", "남양주시", "동두천시", "부천소사구", "부천오정구", "부천원미구",
+                 "성남분당구", "성남수정구", "성남중원구", "수원권선구", "수원영통구", "수원장안구", "수원팔달구", "시흥시", "안산단원구", "안산상록구", "안성시", "안양동안구", "안양만안구", "양주시", "양평군",
+                  "여주시", "연천군", "오산시", "용인기흥구", "용인수지구", "용인처인구", "의왕시", "의정부시", "이천시", "파주시", "평택시", "포천시", "하남시", "화성시"
+                ],
+                "경남": ["거제시", "거창군", "고성군", "김해시", "남해군", "밀양시", "사천시", "산청군", "양산시", "의령군", "진주시", "창녕군", "창원마산합포구", "창원마산회원구", "창원성산구", "창원의창구",
+                 "창원진해구", "통영시", "하동군", "함안군", "함양군", "합천군"],
+                "경북": ["경산시", "경주시", "고령군", "구미시", "김천시", "문경시", "봉화군", "상주시", "성주군", "안동시", "영덕군", "영주시", "영천시", "예천군", 
+                "울진군", "의성군", "청도군", "칠곡군", "포항남구", "포항북구"],
+                "광주": ["광주광산구", "광주남구", "광주동구", "광주북구", "광주서구"],
+                "대구": ["대구군위군", "대구남구", "대구달서구", "대구달성군", "대구동구", "대구북구", "대구서구", "대구수성구", "대구중구"],
+                "대전": ["대전대덕구", "대전동구", "대전서구", "대전유성구", "대전중구"],
+                "부산": ["부산강서구", "부산금정구", "부산기장군", "부산남구", "부산동구", "부산동래구", "부산북구", "부산사상구", "부산사하구", "부산서구", "부산수영구", 
+                "부산연제구", "부산영도구", "부산중구", "부산진구", "부산해운대구"],
+                "서울": ["강남구", "강동구", "강북구", "강서구", "관악구", "광진구", "구로구", "금천구", "노원구", "도봉구", "동대문구", "동작구", "마포구", "서대문구", "서초구", "성동구", "성북구", 
+                "송파구", "양천구", "영등포구", "용산구", "은평구", "종로구", "중구", "중랑구"],  
+                "세종시": ["세종시"],  
+                "울산": ["울산남구", "울산동구", "울산북구", "울산울주군", "울산중구"],
+                "인천": ["인천강화군", "인천계양구", "인천남동구", "인천동구", "인천미추홀구", "인천부평구", "인천서구", "인천연수구", "인천중구"],
+                "전남": ["강진군", "고흥군", "곡성군", "광양시", "구례군", "나주시", "담양군", "목포시", "무안군", "보성군", "순천시", "여수시", "영광군", "영암군", "완도군", "장성군", "장흥군", "진도군", "함평군", "해남군", "화순군"],
+                "전북": ["고창군", "군산시", "김제시", "남원시", "무주군", "부안군", "순창군", "완주군", "익산시", "임실군", "장수군", "전주덕진구", "전주완산구", "정읍시", "진안군"],
+                "제주": ["서귀포시", "제주시"],
+                "충남": ["계룡시", "공주시", "금산군", "논산시", "당진시", "보령시", "부여군", "서산시", "서천군", "아산시", "예산군", "천안동남구", "천안서북구", "청양군", "태안군", "홍성군"],
+                "충북": ["괴산군", "단양군", "보은군", "영동군", "옥천군", "음성군", "제천시", "증평군", "진천군", "청주상당구", "청주서원구", "청주청원구", "청주흥덕구", "충주시"]
+            };
+    
+            $('#city').change(function () {
+                var city = $(this).val();
+                $('#town').html('<option value="">- 시군구 선택 -</option>');
+                if (city && sigunguData[city]) {
+                    sigunguData[city].forEach(function (town) {
+                        $('#town').append('<option value="' + town + '">' + town + '</option>');
+                    });
+                }
+            });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{% include 'chatbot.html' %}
+</body>
+</html>

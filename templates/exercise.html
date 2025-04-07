@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>운동 추천 시스템</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <script src="https://cdn.plot.ly/plotly-2.24.1.min.js"></script>
+  <style>
+    body {
+      background-color: #121820;
+      font-family: 'Malgun Gothic', sans-serif;
+      font-weight: 500;
+      color: #f0f4f8;
+      padding-top: 3rem;
+      padding-bottom: 1.5rem;
+    }
+    /* 네비게이션 바 */
+    .navbar {
+            background-color: #fff;  /* 흰색 배경 */
+            padding: 0.8rem 1rem; /* 상하 여백 */
+            padding-bottom: 5px;
+        }
+        .navbar .container {
+            max-width: 1140px;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        /* FinFit 글자 크기 & 여백 최소화 (16px) */
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 20px !important;
+            padding-top: 2px; 
+            padding-bottom: 2px;
+            font-family: 'Arial', sans-serif;
+        }
+        .navbar-nav {
+            gap: 0.75rem;
+        }
+        /* About만 남기고 굵게 표시, 글자 크기 16px */
+        .navbar-nav .nav-link {
+            padding: 0.5rem 1rem;
+            font-size: 16px !important;
+            font-weight: 500;
+            color: #333 !important;
+            transition: color 0.3s ease;
+            text-align: center;
+            font-family: 'Arial', sans-serif;
+        }
+        .navbar-nav .nav-link.fw-bold {
+            font-weight: bold !important;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #007bff !important;
+        }
+    
+    .highlight-title {
+      font-size: 2rem;
+      font-weight: 800;
+      color: white;
+    }
+    .subtext {
+      font-size: 1.3rem;
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+      word-break: keep-all;
+      white-space: normal;
+    }
+    .badge-custom {
+      background-color: #121820;
+      filter: drop-shadow(0px 0px 4px #00f0ff);
+      color: white;
+      font-weight: bold;
+      font-size: 1.5rem;
+      padding: 5px 12px;
+      border-radius: 8px;
+    }
+    .divider-box {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    width: 100%;
+    }
+  
+    .section-box {
+    background-color: #73757736;
+    padding: 1.5rem;
+    padding-bottom: 1rem;
+    border-radius: 6px;
+    width: calc(50% - 1rem);
+    color: white;
+    box-sizing: border-box;
+    overflow: visible;
+    }
+    .chart-box {
+    width: 245px;
+    height: 245px;
+    margin-inline-end: 1rem;
+  }
+  .chart-box canvas {
+  filter: drop-shadow(0px 0px 4px #00f0ff);
+}
+.keyword-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* 버튼 최소 100px, 자동 분할 */
+  gap: 10px 16px;  /* 세로 10px, 가로 16px 간격 */
+  justify-content: center;
+  max-width: 600px;
+  margin: 0 auto 1.5rem auto;  /* 가운데 정렬 */
+  padding: 10px 0;
+}
+.tag-btn {
+  background-color: #f0f4f8;
+  border: 1px solid #aaa;
+  color: #212121;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  text-align: center;
+  transition: background-color 0.2s;
+}
+
+.tag-btn.selected {
+  background-color: #1a3ca8;
+  color: white;
+  border-color: #1a3ca8;
+}
+  .btn-submit {
+    background-color: #121820;
+    border: none;
+    color: white;
+    padding: 10px 28px;
+    font-weight: bold;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+  }
+  .btn-submit:hover {
+    background-color: #1a3ca8;
+  }
+  @media (max-width: 768px) {
+  .section-box {
+    width: 100%;
+    padding: 1rem;
+    padding-bottom: 2rem;
+  }
+  .body-type-wrapper {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+  }
+}
+  
+  #bmiValue {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-shadow: 0 0 4px #00ffff;
+  font-size: 1.8rem;
+  color: #00ffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 50%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+  .body-type-text {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+@keyframes popIn {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+}
+.body-type-img.selected {
+  animation: popIn 0.5s ease-out forwards;
+  filter: drop-shadow(0 0 8px white) brightness(1.3);
+  transform: scale(1.15);
+}
+
+.body-type-img.unselected {
+  filter: grayscale(100%) brightness(0.4) opacity(0.6);
+  transform: scale(1);
+  transition: all 0.3s ease-in-out;
+}
+.slider-container {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  margin-bottom: 2rem;
+}
+.slider-track {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+.slide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+}
+.slide.active {
+  transform: scale(1.1);
+  z-index: 2;
+}
+.slide img {
+  width: 150px;
+  height: 150px;
+  border-radius: 10px;
+}
+.slider-btn {
+  background-color: transparent;
+  color: white;
+  font-size: 2rem;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  z-index: 10;
+  cursor: pointer;
+}
+.slider-btn.prev {
+  left: 10px;
+}
+.slider-btn.next {
+  right: 10px;
+}
+/* 새로운 건강 정보 입력하기 - 강조형 박스 버튼 */
+.input-box-button {
+    display: inline-block;
+    background-color:#444; 
+    color: white;
+    border: 2px solid white;
+    padding: 10px 20px; 
+    font-size: 15px; 
+    font-weight: 600;
+    border-radius: 12px;
+    box-shadow: 0 3px 8px rgba(255, 255, 255, 0.15);
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s;
+
+}
+
+.input-box-button:hover {
+    background-color:#777777;
+    color: #fff;
+    transform: translateY(-2px);
+}
+.back-button-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0.5rem 0;
+  width: 100%;
+}
+
+  </style>
+</head>
+<body>
+<!-- ✅ 네비게이션 바 -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="{{ url_for('main.main_page') }}">FinFit</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <a class="nav-link fw-bold" href="http://127.0.0.1:5000/company">About</a></ul>
+    </div>
+  </div>
+</nav>
+
+  <main class="container">
+    <!-- 타이틀 영역 -->
+  <div class="mb-4">
+    <div class="highlight-title pt-3">Body Analysis & Exercise Tips</div>
+    <p class="subtext">내 몸에 꼭 맞는 운동, 데이터로 똑똑하게 추천해드립니다.</p>
+  </div>
+   
+    <div class="divider-box">
+      <div class="section-box d-flex flex-column align-items-center">
+        <p class="text-white text-center body-type-text" style="word-break: keep-all; white-space: normal;">
+          당신의 체형은 " <span class="badge-custom">{{ body_type }}</span> " 입니다.
+        </p>        
+      
+        <div class="d-flex flex-wrap justify-content-around align-items-center w-100 mb-4 position-relative" style="padding-right: 2rem; margin: 0.5rem;">
+          {% for label in ['마른형','마른 비만형','표준형','과체중형','비만형'] %}
+            <div class="text-center" style="width: 18%;">
+              <img src="{{ url_for('static', filename='images/' + label + '.png') }}"
+                    alt="{{ label }}"
+                    class="body-type-img {% if label == body_type %}selected{% else %}unselected{% endif %}"
+                    style="height: 150px; display: block; margin: 0 auto;">
+                  <div style="
+                    font-size: 0.9rem;
+                    font-weight: bold;
+                    text-align: center;
+                    word-break: keep-all;
+                    max-width: 120px;
+                    white-space: normal;
+                    line-height: 1.5;
+                    margin-top: 1rem;
+                  ">{{ label }}</div>
+            </div>
+          {% endfor %}
+        </div>
+        
+
+      <div class="d-flex flex-wrap justify-content-center align-items-center gap-4 mb-4">
+        <div class="chart-box position-relative">
+          <canvas id="bmiCanvas" width="250" height="250"></canvas>
+          <div id="bmiValue"></div>
+        </div>
+
+        <div style="max-width: 300px;font-weight: bold;">
+          <p class="mt-2 mb-2">
+            당신의 BMI는 <strong style="color: #0d6efd  ;">{{ bmi }}</strong> 이며,<br>
+            평균 BMI <strong style="color: #0d6efd;">{{ group_avg_bmi }}</strong> 보다
+            <span style="color:{% if bmi > group_avg_bmi %}red{% else %}limegreen{% endif %}">
+              {% if bmi > group_avg_bmi %}높습니다{% else %}낮습니다.{% endif %}
+            </span>
+          </p>
+        </div>
+        <div style="max-width: 500px; font-weight: bold; text-align: center">
+        <p class="mt-2" style="line-height: 1.6; color: white;">
+          당신의 체형과 BMI 분석 결과를 바탕으로,<br>
+          <span class="fs-5 fw-semibold text-primary">FinFit</span>이 가장 적합한 운동을 추천해드릴게요!
+        </p>
+        </div>
+      </div>
+      </div>
+      
+      
+
+      <div class="section-box">
+        <h5 class="fw-bold mb-3" style="font-size: 1.5rem;">1. 체형 맞춤 추천 영상</h5>
+        {% if body_type_videos|length > 0 %}
+        <div class="slider-container">
+          <div class="slider-track" id="body-slider">
+            {% for video in body_type_videos %}
+            <div class="slide">
+              <a href="{{ video.video_url }}" target="_blank">
+                <img src="https://img.youtube.com/vi/{{ video.video_url.split('=')[-1] }}/0.jpg">
+              </a>
+            </div>
+            {% endfor %}
+            {% for video in body_type_videos %}
+            <div class="slide">
+              <a href="{{ video.video_url }}" target="_blank">
+                <img src="https://img.youtube.com/vi/{{ video.video_url.split('=')[-1] }}/0.jpg">
+              </a>
+            </div>
+            {% endfor %}
+          </div>
+          <button class="slider-btn prev" onclick="plusSlides('body', -1)">&#10094;</button>
+          <button class="slider-btn next" onclick="plusSlides('body', 1)">&#10095;</button>
+        </div>
+        {% else %}
+        <p class="text-warning text-center mt-3">추천 가능한 체형 맞춤 영상이 없습니다.</p>
+        {% endif %}
+
+          <h5 class="fw-bold mt-5 mb-3" style="font-size: 1.5rem;">2. 운동 효과별 추천 영상</h5>
+          <form id="exerciseForm" method="POST">
+            <div class="keyword-grid">
+              {% for label in ['심폐지구력','근지구력','유연성','평형성','협응성','근력','민첩성','순발력','근골격계'] %}
+              <button type="button" class="tag-btn {% if label in request.form.get('exercise_effect', '').split(',') %}selected{% endif %}" data-value="{{ label }}">{{ label }}</button>
+              {% endfor %}
+            </div>
+            <input type="hidden" name="exercise_effect" id="exercise_effect">
+            <div class="text-center mb-4">
+              <button type="submit" class="btn-submit">운동 추천 받기</button>
+            </div>
+          </form>
+
+        <div id="exerciseResult">        
+          {% if effect_videos|length > 0 %}
+          <div class="slider-container">
+            <div class="slider-track" id="effect-slider">
+              {% for video in effect_videos %}
+              <div class="slide">
+                <a href="{{ video.video_url }}" target="_blank">
+                  <img src="https://img.youtube.com/vi/{{ video.video_url.split('=')[-1] }}/0.jpg">
+                </a>
+              </div>
+              {% endfor %}
+              {% for video in effect_videos %}
+              <div class="slide">
+                <a href="{{ video.video_url }}" target="_blank">
+                  <img src="https://img.youtube.com/vi/{{ video.video_url.split('=')[-1] }}/0.jpg">
+                </a>
+              </div>
+              {% endfor %}
+            </div>
+            <button class="slider-btn prev" onclick="plusSlides('effect', -1)">&#10094;</button>
+            <button class="slider-btn next" onclick="plusSlides('effect', 1)">&#10095;</button>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- ✅ 건강 정보 다시 입력 -->
+      <div class="back-button-wrapper">
+        <a href="{{ url_for('main.main_page') }}" class="input-box-button">홈으로 돌아가기</a>
+      </div>
+      
+  </main>
+
+
+  <script>
+    const sliderStates = { body: 0, effect: 0 };
+  
+    function updateSlides(type) {
+      const track = document.getElementById(`${type}-slider`);
+      if (!track) return;
+  
+      const slides = Array.from(track.children).filter(slide => slide.nodeType === 1);
+      const count = slides.length;
+      if (count === 0) return;
+  
+      const visibleCount = Math.min(count, 3);
+      const slideWidth = 100 / visibleCount;
+  
+      slides.forEach(slide => {
+        slide.style.flex = `0 0 ${slideWidth}%`;
+        slide.style.maxWidth = `${slideWidth}%`;
+      });
+  
+      slides.forEach(slide => slide.classList.remove("active"));
+  
+      const index = sliderStates[type] % count;
+      slides[index].classList.add("active");
+  
+      const offset = ((index - 1 + count) % count);
+      track.style.transform = `translateX(-${offset * slideWidth}%)`;
+    }
+  
+    function plusSlides(type, n) {
+      const track = document.getElementById(`${type}-slider`);
+      if (!track) return;
+      const count = track.children.length;
+      if (count === 0) return;
+      sliderStates[type] = (sliderStates[type] + n + count) % count;
+      updateSlides(type);
+    }
+  
+    function autoSlide(type) {
+      setInterval(() => plusSlides(type, 1), 4000);
+    }
+  
+    const preSelectedEffects = "{{ request.form.get('exercise_effect', '') }}".split(',');
+  
+    document.addEventListener("DOMContentLoaded", function () {
+      updateSlides('body');
+      updateSlides('effect');
+      autoSlide('body');
+      autoSlide('effect');
+  
+      const buttons = document.querySelectorAll('.tag-btn');
+      const hiddenInput = document.getElementById('exercise_effect');
+  
+      buttons.forEach(btn => {
+        const value = btn.dataset.value;
+        if (preSelectedEffects.includes(value)) {
+          btn.classList.add('selected');
+        }
+  
+        btn.addEventListener('click', () => {
+          btn.classList.toggle('selected');
+          const selected = [...buttons]
+            .filter(b => b.classList.contains('selected'))
+            .map(b => b.dataset.value);
+  
+          if (selected.length > 2) {
+            btn.classList.remove('selected');
+            alert('최대 2개까지만 선택할 수 있습니다.');
+          }
+  
+          hiddenInput.value = selected.join(',');
+        });
+      });
+    });
+  
+    document.addEventListener("DOMContentLoaded", function () {
+      const form = document.getElementById("exerciseForm");
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+
+        fetch(form.action || window.location.href, {
+          method: "POST",
+          body: formData,
+          headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(response => response.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, "text/html");
+          const result = doc.querySelector("#exerciseResult");
+
+          if (result) {
+            document.getElementById("exerciseResult").innerHTML = result.innerHTML;
+            updateSlides('effect');
+
+            // ✅ 스크롤은 여기 안에 위치해야 함!
+            setTimeout(() => {
+              document.getElementById("exerciseResult").scrollIntoView({ behavior: "smooth" });
+            }, 300);
+          }
+        })
+        .catch(err => {
+          console.error("운동 추천 요청 실패", err);
+        });
+      });
+    });
+  </script>
+  
+  
+    
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const canvas = document.getElementById("bmiCanvas");
+      const ctx = canvas.getContext("2d");
+      const bmi = parseFloat("{{ bmi }}");
+      const percent = Math.min(bmi / 50, 1);
+      let current = 0;
+
+      const animate = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+
+        // 바깥 도넛 배경
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, 80, 0, 2 * Math.PI);
+        ctx.strokeStyle = "#2b3e50";
+        ctx.lineWidth = 18;
+        ctx.stroke();
+
+        // 도넛 진행
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, 80, -Math.PI / 2, (2 * Math.PI * (current / 100)) - Math.PI / 2);
+        ctx.strokeStyle = "#00d2ff";  // 밝은 블루 계열
+        ctx.lineWidth = 18;
+        ctx.lineCap = "round";
+        ctx.stroke();
+
+        // 안쪽 원 (얇은 선)
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, 60, 0, 2 * Math.PI);
+        ctx.strokeStyle = "#1f2d3d";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // 숫자 레이블 추가 (0, 10, 20, ..., 50)
+        ctx.font = "15px Arial";
+        ctx.fillStyle = "#ccc";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+
+        for (let i = 0; i <= 49; i += 10) {
+          const angle = (i / 50) * 2 * Math.PI - Math.PI / 2;
+          const x = centerX + Math.cos(angle) * 100;
+          const y = centerY + Math.sin(angle) * 100;
+          ctx.fillText(i.toString(), x, y);
+        }
+
+        const userBmi = parseFloat("{{ bmi }}");
+        const groupBmi = parseFloat("{{ group_avg_bmi }}");
+
+        const diff = userBmi - groupBmi;
+        const arrow = diff > 0 ? "▲" : "▼";
+        const diffText = `${arrow} ${Math.abs(diff).toFixed(1)}`;
+
+        // 중앙 수치 + 차이 함께 표시
+        document.getElementById("bmiValue").innerHTML = `
+          <div style="font-size: 2rem;">${(current / 2).toFixed(1)}</div>
+          <div style="font-size: 1rem; color: ${diff > 0 ? '#ff6b6b' : '#00ff88'};">
+            ${diffText}
+          </div>
+        `;
+
+
+        if (current < percent * 100) {
+          current += 1;
+          requestAnimationFrame(animate);
+        }
+      };
+
+      animate();
+});
+
+
+
+    </script>
+    <!-- Bootstrap + Chatbot -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {% include 'chatbot.html' %}
+    
+    
+</body>
+</html>

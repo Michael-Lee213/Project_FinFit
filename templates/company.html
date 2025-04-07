@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Finfit</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+  <style>
+    /* 기본 리셋 및 폰트 */
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Arial', sans-serif;
+      color: #333;
+      line-height: 1.6;
+      overflow-x: hidden; /* 가로 스크롤 방지 */
+      background-color: #f8f9fa;
+    }
+
+    /* 공통 제목 클래스 (두 제목에 동일한 글자 크기 적용) */
+    .section-title {
+      font-size: 2rem;
+      font-weight: bold;
+    }
+
+    /* 네비게이션 바 오버레이용 */
+    .navbar-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 999; 
+      background: transparent !important; /* 배경 투명 */
+      box-shadow: none !important;        /* 그림자 제거 */
+    }
+    /* FinFit과 Company profile 폰트 크기를 16px로 맞춤 */
+    .navbar-overlay .navbar-brand,
+    .navbar-overlay .nav-link {
+      color: #fff !important;
+      font-size: 16px !important; /* 메인 페이지와 동일하게 16px */
+    }
+    .navbar-overlay .navbar-brand:hover,
+    .navbar-overlay .nav-link:hover {
+      color: #ffd700 !important; /* 호버 시 골드 예시 */
+    }
+
+    /* Hero(배너) 섹션 */
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 25vh;
+      background: url("{{ url_for('static', filename='images/unnamed.jpg') }}") no-repeat center center/cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero-content {
+      text-align: center;
+      color: #fff;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+    }
+    .hero-content h1 {
+      font-size: 1.8rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+    .hero-content h2 {
+      font-size: 1.1rem;
+      margin-bottom: 0;
+    }
+
+    /* 섹션 간 공통 여백 */
+    .my-5 {
+      margin-top: 3rem !important;
+      margin-bottom: 3rem !important;
+    }
+
+    /* Vision 섹션 */
+    .vision-section {
+      padding: 40px 20px; 
+    }
+    .vision-section p {
+      font-size: 1.1rem; 
+    }
+    .vision-circle {
+      width: 80px; 
+      height: 80px;
+      border-radius: 50%;
+      background-color: #e9ecef;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 10px auto;
+      font-weight: bold;
+      color: #333;
+    }
+    .vision-circle strong {
+      font-size: 1.5rem;
+    }
+    .vision-subtitle {
+      font-size: 1.2rem; 
+      font-weight: 700;
+    }
+
+    .team-card {
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      text-align: center;
+      padding: 20px;
+
+      /* 박스 높이 통일 */
+      min-height: 160px;
+      max-height: 160px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      /* 최소 너비와 줄바꿈 설정 */
+      min-width: 200px; 
+      max-width: 250px; 
+      word-wrap: break-word; 
+      white-space: pre-wrap;
+
+      /* 글자 크기를 푸터와 동일하게 (약 14px) */
+      font-size: 0.875rem; /* 혹은 14px */
+    }
+
+    /* 건물 이미지와 텍스트 높이 조절 + 가운데 정렬 */
+    .custom-section {
+      margin-top: 40px !important;
+      margin-bottom: 40px !important;
+    }
+    .text-block {
+      text-align: center;
+    }
+    .building-image {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      max-height: 550px;
+      object-fit: contain;
+      margin: 0 auto;
+    }
+
+    /* 기능 섹션 (텍스트와 이미지 배치) */
+    .feature-row {
+      align-items: center;
+      margin-bottom: 3rem;
+      text-align: center;
+    }
+    .feature-row h4 {
+      margin-bottom: 0;
+    }
+    .feature-img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Hero 섹션 (배경이미지 + 네비 오버레이 + 중앙 텍스트) -->
+  <header class="hero">
+    <nav class="navbar navbar-expand-lg navbar-overlay">
+      <div class="container-fluid px-4">
+        <!-- FinFit 클릭 시 메인(index) 이동 -->
+        <a class="navbar-brand fw-bold" href="http://127.0.0.1:5000/">
+          FinFit
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon" style="color: #fff;"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <!-- Company profile 링크도 16px (이미 .navbar-overlay .nav-link에 설정) -->
+            <li class="nav-item">
+              <a class="nav-link" href="#">Company profile</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="hero-content">
+      <h1>"Find your healthcare"</h1>
+      <h2>당신만을 위한 건강 루틴, FinFit이 설계합니다.</h2>
+    </div>
+  </header>
+
+  <!-- 회사 소개 & 서비스 개요 -->
+  <section class="container custom-section">
+    <div class="row align-items-center">
+      <!-- 왼쪽: 회사 이미지 -->
+      <div class="col-md-6 d-flex justify-content-center">
+        <img src="{{ url_for('static', filename='images/unnamed13.png') }}" 
+             alt="Company Image" 
+             class="img-fluid rounded shadow-sm building-image">
+      </div>
+      <!-- 오른쪽: 핵심 내용 -->
+      <div class="col-md-6 text-block d-flex flex-column justify-content-center mt-4 mt-md-0">
+        <h3 class="section-title">Global Healthcare Services Platform</h3>
+        <p class="mt-3">
+          FinFit은 건강 검진 데이터와 AI 예측 모델을 활용해<br>
+          사용자의 건강 상태를 정밀 분석하고 맞춤형 솔루션을 제공하는<br>
+          스마트 헬스케어 서비스입니다. 바쁜 현대인들을 위해<br>
+          생활 습관 개선부터 병원 연계까지 체계적인 건강 관리를 지원하며,<br>
+          건강 관리와 노후 대비에서 자산보다 건강 테크가 더 중요하다는 믿음 아래<br>
+          누구나 쉽게 건강을 지키고 더 나은 미래를 준비할 수 있도록<br>
+          든든하게 함께합니다.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 비전 섹션 (2025 FinFit's Vision) -->
+  <section class="container vision-section my-5">
+    <h3 class="section-title text-center mb-4">2025 FinFit's Vision</h3>
+    <p class="text-center mb-5" style="max-width: 800px; margin: 0 auto;">
+      2025년까지 FinFit은 1천만 명 이상의 사용자에게 AI 건강 예측과 글로벌 의료 네트워크를 제공하여<br>
+      세계적 스마트 헬스케어 플랫폼으로 도약합니다.
+    </p>
+    <div class="row text-center">
+      <div class="col">
+        <div class="vision-circle">
+          <strong>1</strong>
+        </div>
+        <h5 class="vision-subtitle">AI Disease Prediction</h5>
+      </div>
+      <div class="col">
+        <div class="vision-circle">
+          <strong>2</strong>
+        </div>
+        <h5 class="vision-subtitle">Hospital Recommendations</h5>
+      </div>
+      <div class="col">
+        <div class="vision-circle">
+          <strong>3</strong>
+        </div>
+        <h5 class="vision-subtitle">Body Analysis & Exercise Tips</h5>
+      </div>
+      <div class="col">
+        <div class="vision-circle">
+          <strong>4</strong>
+        </div>
+        <h5 class="vision-subtitle">Depression Prediction</h5>
+      </div>
+      <div class="col">
+        <div class="vision-circle">
+          <strong>5</strong>
+        </div>
+        <h5 class="vision-subtitle">Squat Analysis</h5>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6개 기능 섹션 (번갈아 배치) -->
+  <section class="container my-5">
+    <!-- 1행: 텍스트 / 이미지 -->
+    <div class="row feature-row mb-5 text-center">
+      <div class="col-md-6">
+        <h2>AI Disease Prediction</h2>
+        <h6>AI 질병 예측과 그래프로 보는 건강 분석</h6>
+      </div>
+      <div class="col-md-6">
+        <img src="{{ url_for('static', filename='images/unnamed21.jpg') }}"
+             alt="AI Disease Prediction"
+             class="img-fluid rounded shadow-sm feature-img">
+      </div>
+    </div>
+
+    <!-- 2행: 이미지 / 텍스트 -->
+    <div class="row feature-row mb-5 text-center">
+      <div class="col-md-6 order-md-2">
+        <h2>Hospital Recommendations</h2>
+        <h6>질병 별 위치기반 병원 매칭 서비스</h6>
+      </div>
+      <div class="col-md-6 order-md-1">
+        <img src="{{ url_for('static', filename='images/unnamed22.png') }}"
+             alt="Hospital Recommendations"
+             class="img-fluid rounded shadow-sm feature-img">
+      </div>
+    </div>
+
+    <!-- 3행: 텍스트 / 이미지 -->
+    <div class="row feature-row mb-5 text-center">
+      <div class="col-md-6">
+        <h2>Body Analysis & Exercise Tips</h2>
+        <h6>체형 분석을 통한 건강 맞춤 운동 솔루션 제공</h6>
+      </div>
+      <div class="col-md-6">
+        <img src="{{ url_for('static', filename='images/unnamed23.jpg') }}"
+             alt="Body Analysis & Exercise Tips"
+             class="img-fluid rounded shadow-sm feature-img">
+      </div>
+    </div>
+
+    <!-- 4행: 이미지 / 텍스트 -->
+    <div class="row feature-row mb-5 text-center">
+      <div class="col-md-6 order-md-2">
+        <h2>Depression Prediction</h2>
+        <h6>검진 데이터 기반 우울증 예측 및 맞춤 정보 제공</h6>
+      </div>
+      <div class="col-md-6 order-md-1">
+        <img src="{{ url_for('static', filename='images/unnamed24.jpg') }}"
+             alt="Depression Prediction"
+             class="img-fluid rounded shadow-sm feature-img">
+      </div>
+    </div>
+
+    <!-- 5행: 텍스트 / 이미지 -->
+    <div class="row feature-row mb-5 text-center">
+      <div class="col-md-6">
+        <h2>Squat Analysis</h2>
+        <h6>AI 분석을 통한 정확한 운동 자세 교정 서비스</h6>
+      </div>
+      <div class="col-md-6">
+        <img src="{{ url_for('static', filename='images/unnamed25.jpg') }}"
+             alt="Squat Analysis"
+             class="img-fluid rounded shadow-sm feature-img">
+      </div>
+    </div>
+
+    <!-- 6행: 이미지 / 텍스트 -->
+    <div class="row feature-row mb-5 text-center">
+      <div class="col-md-6 order-md-2">
+        <h2>Fin Chatbot</h2>
+        <h6>사용자를 위한 건강 대화 도우미 Fit봇</h6>
+      </div>
+      <div class="col-md-6 order-md-1">
+        <img src="{{ url_for('static', filename='images/unnamed26.jpg') }}"
+             alt="Fin Chatbot"
+             class="img-fluid rounded shadow-sm feature-img">
+      </div>
+    </div>
+  </section>
+
+  <!-- Team Member (5명) -->
+  <section class="container my-5">
+    <h2 class="fw-bold mb-4 text-center">Team Member</h2>
+    <div class="row g-4 justify-content-center">
+      <!-- 1) 이한세 (Michael) -->
+      <div class="col-md-2 col-sm-6">
+        <div class="team-card">
+          <h6 style="font-weight: bold;">이한세 (Michael)</h6>
+          <p># Squat Analysis<br></p>
+          <p>hslee7087@gmail.com</p>
+        </div>
+      </div>
+      <!-- 2) 김미경 (Mia) -->
+      <div class="col-md-2 col-sm-6">
+        <div class="team-card">
+          <h6 style="font-weight: bold;">김미경 (Mia)</h6>
+          <p># Body & Exercise </p>
+          <p>fork07140812@gmail.com</p>
+        </div>
+      </div>
+      <!-- 3) 이준혁 (Simon) -->
+      <div class="col-md-2 col-sm-6">
+        <div class="team-card">
+          <h6 style="font-weight: bold;">이준혁 (Simon)</h6>
+          <p># AI Disease Prediction</p>
+          <p>arsey99999@gmail.com</p>
+        </div>
+      </div>
+      <!-- 4) 하연우 (Woo) -->
+      <div class="col-md-2 col-sm-6">
+        <div class="team-card">
+          <h6 style="font-weight: bold;">하연우 (Woo)</h6>
+          <p># Depression Prediction</p>
+          <p>woo565696@gmail.com</p>
+        </div>
+      </div>
+      <!-- 5) 이기성 (Bradley) -->
+      <div class="col-md-2 col-sm-6">
+        <div class="team-card">
+          <h6 style="font-weight: bold;">이기성 (Bradley)</h6>
+          <p># Hospital Recommend</p>
+          <p>leegisung778899@gmail.com</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="text-center py-3" style="background-color: #f1f1f1;">
+    <small>&copy; 2025 이한세, 김미경, 이준혁, 하연우, 이기성 </small>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

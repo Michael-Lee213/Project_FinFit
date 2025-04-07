@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>FinFit</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* 전체 배경 및 폰트 */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #121820; /* 다크 배경 */
+      color: #fff;              /* 기본 글자색 흰색 */
+      font-size: 0.8rem;
+    }
+    /* 네비게이션 바 */
+    .navbar {
+      background-color: #fff;  /* 흰색 배경 */
+      padding: 0.8rem 1rem;
+      padding-bottom: 5px;
+    }
+    .navbar .container {
+      max-width: 1140px;
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+    /* FinFit 글자 크기 & 여백 최소화 (16px) */
+    .navbar-brand {
+      font-weight: bold;
+      font-size: 20px !important;
+      padding-top: 2px;
+      padding-bottom: 2px;
+      font-family: 'Arial', sans-serif;
+    }
+    .navbar-nav {
+      gap: 0.75rem;
+    }
+    /* About만 남기고 굵게 표시, 글자 크기 16px */
+    .navbar-nav .nav-link {
+      padding: 0.5rem 1rem;
+      font-size: 20px !important;
+      font-weight: 500;
+      color: black;
+      transition: color 0.3s ease;
+      text-align: center;
+      font-family: 'Arial', sans-serif;
+    }
+    .navbar-nav .nav-link.fw-bold {
+      font-weight: bold !important;
+    }
+    .navbar-nav .nav-link:hover {
+      color: #007bff !important;
+    }
+    /* 인트로 섹션 */
+    .intro-section {
+      padding: 20px 20px;
+      text-align: center;
+      color: #fff;
+      margin-top: 70px;
+      margin-bottom: 0;
+    }
+    .intro-section h1 {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .intro-section p {
+      font-size: 0.9rem;
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.4;
+    }
+    /* 메인 데시보드 레이아웃 */
+    .main-dashboard {
+      display: grid;
+      grid-template-columns: 25% 50% 25%;
+      gap: 10px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 10px;
+      align-items: stretch;
+    }
+    .panel {
+      background: #1f2630;
+      border-radius: 8px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      height: 600px;
+    }
+    .panel h2 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+      color: #fff;
+      text-align: center;
+    }
+    .sub-panel {
+      width: 100%;
+      background: #2b2f3a;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      padding: 15px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .sub-panel h3 {
+      margin: 0 0 10px;
+      font-size: 0.95rem;
+      color: #fff;
+    }
+    .analysis-items {
+      line-height: 1.3;
+      font-size: 0.8rem;
+      margin-bottom: 10px;
+      color: #ccc;
+    }
+    .label-area {
+      margin: 6px 0 5px;
+      font-weight: bold;
+      font-size: 0.8rem;
+      color: #fff;
+    }
+    .bubble-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 8px 0;
+    }
+    .bubble {
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      background-color: #2b2f3a;
+      border: 2px solid #4fc3f7;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.2s, border-color 0.2s;
+    }
+    .bubble:hover {
+      background-color: #4fc3f7;
+      border-color: #29b6f6;
+    }
+    .main-bubble {
+      width: 35px;
+      height: 35px;
+      background-color: #2b2f3a;
+      border: 2px solid #4fc3f7;
+      color: #fff;
+      font-size: 14px;
+    }
+    /* 버튼 스타일 (크기 축소) */
+    .action-button {
+      margin-top: 10px;
+      background-color: #2b2f3a;
+      border: 2px solid #4fc3f7;
+      color: #fff;
+      padding: 5px 10px;
+      font-size: 0.75rem;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background-color 0.2s, border-color 0.2s;
+      white-space: nowrap;
+      text-align: center;
+      max-width: 120px;
+      width: 100%;
+    }
+    .action-button:hover {
+      background-color: #4fc3f7;
+      border-color: #29b6f6;
+    }
+    /* 홈 버튼도 동일하게 축소 */
+    .home-button {
+      margin-top: 10px;
+      background-color: #2b2f3a;
+      border: 2px solid #4fc3f7;
+      color: #fff;
+      padding: 5px 10px;
+      font-size: 0.75rem;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background-color 0.2s, border-color 0.2s;
+      white-space: nowrap;
+      max-width: 120px;
+      width: 100%;
+    }
+    .home-button:hover {
+      background-color: #4fc3f7;
+      border-color: #29b6f6;
+    }
+    .center-panel .video-container {
+      width: 100%;
+      flex: 1;
+      background-color: #000;
+      border-radius: 8px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+    .center-panel .video-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    #tts-guide {
+      margin-top: 10px;
+      display: none;
+      font-weight: bold;
+      font-size: 0.85rem;
+      color: #333;
+      background: #f0f0f0;
+      padding: 8px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .right-panel .report-box {
+      width: 100%;
+      flex: 1;
+      background: #2b2f3a;
+      border-radius: 8px;
+      padding: 15px;
+      box-sizing: border-box;
+      overflow-y: auto;
+    }
+    .right-panel .report-box p {
+      font-size: 0.8rem;
+      color: #ccc;
+      margin: 0 0 10px;
+      text-align: center;
+    }
+    .chart-container {
+      position: relative;
+      margin: 10px auto 0;
+      max-width: 320px;
+      height: 240px;
+    }
+    .home-button-container {
+      margin-top: 20px;
+      text-align: center;
+    }
+    @media (max-width: 992px) {
+      .main-dashboard {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    @media (max-width: 600px) {
+      .main-dashboard {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- ✅ 네비게이션 바 -->
+  <nav class="navbar navbar-light bg-white shadow-sm fixed-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="{{ url_for('main.main_page') }}">FinFit</a>
+      <ul class="navbar-nav ms-auto">
+        <a class="nav-link fw-bold" href="http://127.0.0.1:5000/company">About</a>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- 인트로 섹션 -->
+  <section class="intro-section">
+    <h1>Squat Analysis Services</h1>
+    <p>
+      webcam을 통해 실시간 자세 분석이 가능하며<br>
+      운동이 끝나면 AI 분석을 통한 피드백을 제공해 드립니다.
+    </p>
+  </section>
+
+  <!-- 메인 데시보드 (3패널) -->
+  <div class="main-dashboard">
+    <!-- 왼쪽 패널 -->
+    <div class="panel left-panel">
+      <!-- sub-panel 1: 운동 설정 -->
+      <div class="sub-panel">
+        {% if not analysis_started and not report_ready %}
+          <!-- 동영상 업로드 기능을 포함한 폼 -->
+          <form action="{{ url_for('squat.start') }}" method="post" enctype="multipart/form-data"
+                style="width:100%; display:flex; flex-direction: column; align-items: center;">
+            <h3>운동 컨트롤</h3>
+            <div class="analysis-items" style="margin-bottom: 14px;">
+              스쿼트 자세, 이렇게 체크하세요!<br>
+              하체운동 효과 UP 부상 위험 Down !<br><br>
+              1. 무릎을 충분히 굽혀주세요!<br><br>
+              2. 무릎을 완전히 펴지 마세요!<br><br>
+              3. 엉덩이 힘 과도하게 쓰지 않기!<br><br>
+              4. 엉덩이보다 무릎 먼저 쓰지 않기!<br><br>
+            </div>
+            <div class="label-area">목표 횟수 설정</div>
+            <div class="bubble-buttons">
+              <div class="bubble" onclick="changeReps(-5)">-5</div>
+              <div class="bubble" onclick="changeReps(-1)">-1</div>
+              <div class="bubble main-bubble" id="repsBubble">1</div>
+              <div class="bubble" onclick="changeReps(1)">+1</div>
+              <div class="bubble" onclick="changeReps(5)">+5</div>
+            </div>
+            <div class="label-area">목표 세트 설정</div>
+            <div class="bubble-buttons">
+              <div class="bubble" onclick="changeSets(-1)">-</div>
+              <div class="bubble main-bubble" id="setsBubble">1</div>
+              <div class="bubble" onclick="changeSets(1)">+</div>
+            </div>
+            <input type="hidden" id="targetCountInput" name="target_count" value="1">
+            <input type="hidden" id="targetSetsInput" name="target_sets" value="1">
+
+            <!-- 파일 업로드 UI -->
+            <div class="mb-3" style="width: 100%; display:flex; flex-direction: column; align-items: center;">
+              <label for="videoUpload" class="form-label" style="color: #fff; font-weight: bold; text-align:center; width:100%;">
+                동영상 파일 업로드 (선택)
+              </label>
+              <input type="file" id="videoUpload" name="video_file" accept="video/*"
+                     style="display:none;" onchange="handleFileChange(this)">
+              <label for="videoUpload" class="action-button" style="margin-top: 5px; margin-bottom: 0;">
+                파일 선택
+              </label>
+              <span id="fileName" style="font-size:0.75rem; color:#ccc; margin-top:5px;">선택된 파일 없음</span>
+            </div>
+
+            <button class="action-button" type="submit">운동 시작</button>
+          </form>
+        {% else %}
+          <h3>운동 컨트롤</h3>
+          <div class="label-area">목표 횟수</div>
+          <div class="bubble-buttons">
+            <div class="bubble" onclick="changeReps(-1)">-</div>
+            <div class="bubble main-bubble" id="repsBubble">{{ target_count }}</div>
+            <div class="bubble" onclick="changeReps(1)">+</div>
+          </div>
+          <div class="label-area">목표 세트</div>
+          <div class="bubble-buttons">
+            <div class="bubble" onclick="changeSets(-1)">-</div>
+            <div class="bubble main-bubble" id="setsBubble">{{ target_sets }}</div>
+            <div class="bubble" onclick="changeSets(1)">+</div>
+          </div>
+          <input type="hidden" id="targetCountInput" value="{{ target_count }}">
+          <input type="hidden" id="targetSetsInput" value="{{ target_sets }}">
+          {% if analysis_started and not report_ready %}
+            <form action="{{ url_for('squat.stop') }}" method="post">
+              <button type="submit" class="action-button">분석 종료</button>
+            </form>
+          {% endif %}
+          {% if report_ready %}
+            <form action="{{ url_for('squat.reset') }}" method="post">
+              <button type="submit" class="action-button">다시 시작</button>
+            </form>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- 가운데 패널: 실시간 동작 분석 -->
+    <div class="panel center-panel">
+      <h2>실시간 동작 분석</h2>
+      <div class="video-container">
+        {% if analysis_started %}
+          <img src="{{ url_for('squat.video_feed') }}" alt="Video Feed" id="videoFeed">
+        {% else %}
+          <div style="text-align:center; color:#fff; font-size:0.9rem;">
+            운동을 시작하면<br>분석 화면이 표시됩니다.
+          </div>
+        {% endif %}
+      </div>
+      {% if analysis_started %}
+        <div id="tts-guide"></div>
+      {% endif %}
+    </div>
+
+    <!-- 오른쪽 패널: AI 분석 리포트 -->
+    <div class="panel right-panel">
+      <h2>AI 분석 리포트</h2>
+      {% if report_ready %}
+        <div class="report-box">
+          <p>
+            FinFit 트레이너가 운동 피드백을 정리했어요.<br>
+            잘한 점과 개선할 점을 확인해보세요!
+          </p>
+          {% for line in feedback_text.split('\n') %}
+            <p>{{ line }}</p>
+          {% endfor %}
+          <div style="margin: 20px 0 0; background: #1f2630; border-radius: 8px; padding: 15px; text-align:center;">
+            <div style="font-size: 2rem; margin-bottom: 8px;">🎧</div>
+            <p style="margin: 0 0 12px; font-size:0.8rem; color: #ccc;">
+              AI 트레이너의 피드백을 듣고<br>올바른 자세를 익혀보세요.
+            </p>
+            <button onclick="speakFeedback()" class="action-button" style="border-color:#aed581; margin-top: 12px;">
+              🎧 피드백 듣기
+            </button>
+          </div>
+          <div class="chart-container">
+            <canvas id="neonChart"></canvas>
+          </div>
+        </div>
+      {% else %}
+        <div style="text-align:center; margin-top: 50px; font-size:0.9rem; color:#ccc;">
+          운동 종료 시<br>AI 분석 결과가 표시됩니다.
+        </div>
+      {% endif %}
+
+      <!-- 홈으로 돌아가기 버튼 영역 -->
+      <div class="home-button-container">
+        <button class="home-button" onclick="location.href='/'">홈으로 돌아가기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Chart.js Annotation Plugin CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.1.0/dist/chartjs-plugin-annotation.min.js"></script>
+
+  <!-- 자바스크립트 로직 -->
+  <script>
+    function changeReps(value) {
+      const repsBubble = document.getElementById('repsBubble');
+      const targetCountInput = document.getElementById('targetCountInput');
+      if (!repsBubble) return;
+      let currentReps = parseInt(repsBubble.textContent, 10);
+      currentReps += value;
+      if (currentReps < 1) currentReps = 1;
+      repsBubble.textContent = currentReps;
+      if (targetCountInput) {
+        targetCountInput.value = currentReps;
+      }
+    }
+    function changeSets(value) {
+      const setsBubble = document.getElementById('setsBubble');
+      const targetSetsInput = document.getElementById('targetSetsInput');
+      if (!setsBubble) return;
+      let currentSets = parseInt(setsBubble.textContent, 10);
+      currentSets += value;
+      if (currentSets < 1) currentSets = 1;
+      setsBubble.textContent = currentSets;
+      if (targetSetsInput) {
+        targetSetsInput.value = currentSets;
+      }
+    }
+
+    // 파일 선택 시 파일명을 표시하는 함수
+    function handleFileChange(input) {
+      const fileNameSpan = document.getElementById("fileName");
+      if (input.files && input.files[0]) {
+        fileNameSpan.textContent = input.files[0].name;
+      } else {
+        fileNameSpan.textContent = "선택된 파일 없음";
+      }
+    }
+
+    function speakFeedback() {
+      const text = `{{ feedback_text | safe | replace('\n', ' ') }}`;
+      const voices = window.speechSynthesis.getVoices();
+      const preferredVoice = voices.find(v => v.lang === 'ko-KR' && v.name.includes('Female')) ||
+                             voices.find(v => v.lang === 'ko-KR');
+      const msg = new SpeechSynthesisUtterance(text);
+      msg.lang = 'ko-KR';
+      msg.voice = preferredVoice;
+      msg.pitch = 1.1;
+      msg.rate = 0.95;
+      msg.volume = 1;
+      window.speechSynthesis.speak(msg);
+    }
+
+    function playStartGuidance() {
+      const message = '정면을 향해 서 있으면 자세 인식이 시작됩니다.';
+      const msg = new SpeechSynthesisUtterance(message);
+      msg.lang = 'ko-KR';
+      msg.pitch = 1.1;
+      msg.rate = 0.95;
+      msg.volume = 1;
+      window.speechSynthesis.speak(msg);
+
+      const guideDiv = document.getElementById("tts-guide");
+      if (guideDiv) {
+        guideDiv.innerText = message;
+        guideDiv.style.display = 'block';
+      }
+    }
+
+    window.onload = () => {
+      {% if analysis_started %}
+        const img = document.getElementById("videoFeed");
+        if (img) {
+          img.onload = function () {
+            console.log("웹캠 피드 로드됨");
+          };
+          img.src = "/squat/video_feed?ts=" + Date.now();
+        }
+        playStartGuidance();
+      {% endif %}
+      if(document.getElementById('neonChart')){
+        initNeonChart();
+      }
+    };
+
+    // 차트 시각화: 면적 채우기(Area Chart) + Annotation 적용
+    function initNeonChart() {
+      const angleData = {{ angle_history | tojson }};
+      if (!Array.isArray(angleData) || angleData.length === 0) {
+        console.warn("차트에 사용할 angle_history 데이터가 없습니다.");
+        return;
+      }
+      
+      // x축 레이블 (예: 반복 횟수)
+      const labels = angleData.map((_, i) => i + 1);
+      
+      const ctx = document.getElementById('neonChart').getContext('2d');
+      
+      // 그라디언트 생성 (면적 채우기 효과)
+      const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+      gradient.addColorStop(0, 'rgba(66, 245, 239, 0.6)');
+      gradient.addColorStop(1, 'rgba(66, 245, 239, 0.05)');
+      
+      const minAngle = Math.min(...angleData);
+      const maxAngle = Math.max(...angleData);
+      const margin = 10;
+      
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Knee Angle',
+            data: angleData,
+            fill: true,               // 면적 채우기 활성화
+            backgroundColor: gradient,
+            borderColor: '#42f5ef',
+            borderWidth: 2,
+            tension: 0.3,
+            pointRadius: 3,
+            pointHoverRadius: 6,
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            title: {
+              display: true,
+              text: '무릎 각도 변화 (Repetition vs. Knee Angle)',
+              color: '#fff'
+            },
+            legend: {
+              labels: { color: '#fff' }
+            },
+            annotation: {
+              annotations: {
+                line90: {
+                  type: 'line',
+                  yMin: 90,
+                  yMax: 90,
+                  borderColor: 'red',
+                  borderWidth: 2,
+                  label: {
+                    enabled: true,
+                    content: '90° (Full Squat)',
+                    position: 'start',
+                    backgroundColor: 'rgba(255, 0, 0, 0.5)'
+                  }
+                },
+                line135: {
+                  type: 'line',
+                  yMin: 135,
+                  yMax: 135,
+                  borderColor: 'orange',
+                  borderWidth: 2,
+                  label: {
+                    enabled: true,
+                    content: '135° (Partial Squat)',
+                    position: 'start',
+                    backgroundColor: 'rgba(255, 165, 0, 0.5)'
+                  }
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              title: {
+                display: true,
+                text: 'Repetition'
+              },
+              ticks: { color: '#fff' },
+              grid: { color: '#555' }
+            },
+            y: {
+              title: {
+                display: true,
+                text: 'Knee Angle (°)'
+              },
+              ticks: { color: '#fff' },
+              grid: { color: '#555' },
+              min: Math.max(0, minAngle - margin),
+              max: maxAngle + margin
+            }
+          }
+        }
+      });
+    }
+  </script>
+
+  {% include 'chatbot.html' %}
+</body>
+</html>

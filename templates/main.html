@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinFit</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        html, body {
+            font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow-y: hidden;  /* ✅ 이 줄 추가! */
+        }
+        
+        /* 네비게이션 바 */
+        .navbar {
+            background-color: #fff;  /* 흰색 배경 */
+            padding: 0.8rem 1rem; /* 상하 여백 */
+            padding-bottom: 5px;
+        }
+        .navbar .container {
+            max-width: 1140px;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        /* FinFit 글자 크기 & 여백 최소화 (16px) */
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 20px !important;
+            padding-top: 2px; 
+            padding-bottom: 2px;
+        }
+        .navbar-nav {
+            gap: 0.75rem;
+        }
+        /* About만 남기고 굵게 표시, 글자 크기 16px */
+        .navbar-nav .nav-link {
+            padding: 0.5rem 1rem;
+            font-size: 16px !important;
+            font-weight: 500;
+            color: #333 !important;
+            transition: color 0.3s ease;
+            text-align: center;
+        }
+        .navbar-nav .nav-link.fw-bold {
+            font-weight: bold !important;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #007bff !important;
+        }
+        @media (max-width: 991.98px) {
+            .navbar-collapse {
+                background-color: #ffffff;
+                padding: 1rem 0;
+            }
+            .navbar-nav {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+            .navbar-toggler {
+                padding: 0.25rem 0.75rem;
+            }
+        }
+
+        /* 배경 비디오 슬라이드 배너 */
+        .carousel-container {
+            position: relative;
+            width: 100vw;
+            height: calc(100vh - 0px);  /* ✅ 네비게이션 바 높이만큼 뺌 */
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #fff;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
+            box-sizing: border-box;
+            min-height: 100vh;   /* 화면 전체 높이 */
+            min-height: 100dvh;  /* 모바일 브라우저 대응 */
+        }
+        .carousel-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+        .carousel-caption {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            max-width: 100%;
+        }
+        .carousel-caption h1 {
+            font-size: clamp(2rem, 3.5vw, 3rem);
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .carousel-caption p {
+            font-size: clamp(1rem, 1.2vw, 1.4rem);
+            font-weight: 300;
+        }
+
+        .carousel-page-indicator {
+            position: absolute;
+            bottom: 150px; 
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+        .transparent-btn {
+            font-size: 16px;            /* Fit봇 버튼과 통일 */
+            font-weight: bold;
+            color: #fff;
+            background: none;
+            border: 2px solid #fff;     /* 흰색 테두리 */
+            border-radius: 999px;       /* 타원형 */
+            padding: 8px 20px;
+            text-decoration: none;
+        }
+        .transparent-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .feature-buttons {
+            position: absolute;
+            bottom: 40px; /* ✅ 입력버튼보다 아래에 고정 */
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            justify-content: center;
+            flex-wrap: nowrap;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .custom-btn {
+            font-size: 14px;
+            font-weight: bold;
+            color: #fff;
+            border: 2px solid #fff;
+            border-radius: 999px;
+            padding: 8px 16px;
+            background: transparent;
+            text-decoration: none;
+            transition: background 0.3s ease, color 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .custom-btn:hover {
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+        }
+        @media (max-width: 576px) {
+            .feature-buttons {
+                flex-wrap: wrap;
+                bottom: 16px;
+                gap: 8px;
+            }
+            .custom-btn {
+                font-size: 13px;
+                padding: 6px 12px;
+            }
+        }
+
+
+
+        /* Fit봇 버튼(#fitbot-toggle) - 타원형, 흰색 테두리, 투명 배경, 16px */
+        #fitbot-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            background: none;
+            border: 2px solid #fff;
+            border-radius: 999px;
+            padding: 6px 16px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+        }
+        #fitbot-toggle:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        @media (max-width: 768px) {
+            .carousel-container {
+                min-height: 70vh;
+                padding: 3vh 3vw;
+            }
+        }
+        @media (max-width: 576px) {
+            .carousel-container {
+                padding: 2vh 2vw;
+            }
+        }
+
+        /* 알럿창 스타일 */
+        .swal-title-custom {
+        font-size: 20px;
+        }
+        .swal-text-custom {
+        font-size: 14px;
+        }
+        .swal-button-custom {
+        font-size: 14px;
+        padding: 8px 20px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 네비게이션 바 -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="#">FinFit</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link fw-bold" href="http://127.0.0.1:5000/company">About</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+</nav>
+
+<!-- 배경 비디오 슬라이드 -->
+<div class="carousel-container">
+    <video autoplay muted loop playsinline>
+        <source src="/static/images/bg6.mp4" type="video/mp4">
+        브라우저에서 비디오를 지원하지 않습니다.
+    </video>
+    <div id="textCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <h1>건강 데이터 기반 맞춤 예측</h1>
+                <p>정확한 건강 분석을 통해 최적의 솔루션을 제공합니다.</p>
+            </div>
+            <div class="carousel-item">
+                <h1>AI를 활용한 질병 리스크 분석</h1>
+                <p>건강검진 데이터와 AI 모델을 기반으로 건강 위험을 예측합니다.</p>
+            </div>
+            <div class="carousel-item">
+                <h1>사용자 친화적인 건강 관리</h1>
+                <p>직관적인 인터페이스로 건강 데이터를 쉽게 관리하세요.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="carousel-page-indicator">
+        <a class="transparent-btn" href="/customer">건강정보 입력하기</a>
+    </div>
+        <!-- 기능 버튼 영역 -->
+        <div class="feature-buttons text-center mt-3">
+            <a href="{{ url_for('disease.predict_disease') }}" class="custom-btn">#질병예측</a>
+            <a href="{{ url_for('hospital.hospital_view') }}" class="custom-btn">#병원추천</a>
+            <a href="{{ url_for('depression.depression') }}" class="custom-btn">#우울증예측</a>
+            <a href="{{ url_for('exercise.exercise_page') }}" class="custom-btn">#체형분석</a>
+            <a href="{{ url_for('squat.index') }}" class="custom-btn">#운동자세교정</a>
+        </div>
+    
+    {% include 'chatbot.html' %}
+</div>
+
+<!-- 기능 섹션, 흰색 배경 부분 전부 제거
+<section class="features"> ... </section>
+<div class="text-center my-5"> ... </div>
+-->
+
+<!-- 챗봇만 남김 (Fit봇 버튼 #fitbot-toggle) -->
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var carouselElement = document.getElementById("textCarousel");
+        var carousel = new bootstrap.Carousel(carouselElement);
+        // 좌우 화살표 제거 → 관련 이벤트 불필요
+    });
+
+    // URL에 submitted=true 쿼리 파라미터가 있을 때 알림 띄우기
+    document.addEventListener("DOMContentLoaded", function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('submitted') === 'true') {
+      Swal.fire({
+        icon: 'success',
+        title: '건강 정보가 입력되었습니다!',
+        html: '<small>메인 페이지에서 <b>#질병예측</b>, <b>#우울증예측</b> 등<br>다양한 AI 기능을 체험해보세요.</small>',
+        confirmButtonText: '확인',
+        confirmButtonColor: '#2ecc71',  // ✅ 민트/초록 계열
+        width: '380px',                 // ✅ 팝업 크기 조정
+        customClass: {
+          title: 'swal-title-custom',
+          htmlContainer: 'swal-text-custom',
+          confirmButton: 'swal-button-custom'
+        }
+      });
+    }
+  });
+</script>
+</body>
+</html>

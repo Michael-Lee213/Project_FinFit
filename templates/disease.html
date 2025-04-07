@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>예측 결과</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> <!-- FontAwesome 추가 -->
+    <style>
+    
+                /* 네비게이션 바 */
+                .navbar {
+            background-color: #fff;  /* 흰색 배경 */
+            padding: 0.8rem 1rem; /* 상하 여백 */
+            padding-bottom: 5px;
+        }
+        .navbar .container {
+            max-width: 1140px;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        /* FinFit 글자 크기 & 여백 최소화 (16px) */
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 20px !important;
+            padding-top: 2px; 
+            padding-bottom: 2px;
+        }
+        .navbar-nav {
+            gap: 0.75rem;
+        }
+        /* About만 남기고 굵게 표시, 글자 크기 16px */
+        .navbar-nav .nav-link {
+            padding: 0.5rem 1rem;
+            font-size: 16px !important;
+            font-weight: 500;
+            color: #333 !important;
+            transition: color 0.3s ease;
+            text-align: center;
+        }
+        .navbar-nav .nav-link.fw-bold {
+            font-weight: bold !important;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #007bff !important;
+        }
+        @media (max-width: 991.98px) {
+            .navbar-collapse {
+                background-color: #ffffff;
+                padding: 1rem 0;
+            }
+            .navbar-nav {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+            .navbar-toggler {
+                padding: 0.25rem 0.75rem;
+            }
+        }
+        /* 기본 스타일 */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #121820;
+            color: white;
+            margin: 0;
+            padding-top: 80px; /* ✅ 네비바와 겹치지 않게 처리 */
+            text-align: center;
+        }
+    
+        .container {
+            max-width: 95%;      /* 기존 100% 대신 살짝 여백 줌 */
+            margin: 0 auto;       /* 가운데 정렬 */
+            padding: 0 15px;      /* 좌우 여백 추가 */
+        }
+    
+        .section {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 255, 0.1);
+            margin-bottom: 40px;
+        }
+    
+        .section h2 {
+            color: #0056b3;
+            border-bottom: 2px solid #0056b3;
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+    
+        /* 그래프 컨테이너 */
+        .graph-container {
+            width: 100%;
+            margin: 20px auto;
+            padding: 15px;
+            background: rgba(40, 40, 40, 0.5);
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(6, 6, 6, 0.1);
+        }
+        
+        /* 제목들 크기조정 */
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: white;
+            margin-top: 10px;      /* ✅ 추가 또는 줄이기 */
+            margin-bottom: 5px;    /* ✅ 줄이기 */
+        }
+
+        h2 {
+            font-size: 1.25rem;  /* ⬅️ 기존 1.5rem → 더 절제된 크기 */
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: white;
+        }
+
+        /* ✅ 건강 메시지 스타일 - 깔끔 & 고급 */
+       /* ✅ 건강 메시지 스타일 - 깔끔 & 고급 */
+      .summary-box {
+          font-family: 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', 'Arial', sans-serif;
+          font-size: 14px;
+          font-weight: 600;
+          padding: 12px 20px;
+          border-radius: 12px;
+          max-width: 600px;
+          margin: 20px auto;
+          text-align: center;
+          display: inline-block;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+          transition: background-color 0.3s ease, transform 0.2s ease;
+          color: white;                          /* ✅ 모든 텍스트 흰색 */
+          background-color: rgba(255, 255, 255, 0.05);  /* ✅ 기본 반투명 배경 */
+          border: 1px solid rgba(255, 255, 255, 0.2);   /* ✅ 연한 테두리 추가 */
+        }
+
+        /* ✅ 🟢 정상 상태 */
+        .summary-box.success {
+            background-color: rgba(255, 255, 255, 0.05); /* ✅ 연한 반투명 배경 유지 */
+            color: white;
+        }
+        .summary-box.success:hover {
+            background-color: rgba(255, 255, 255, 0.1);  /* ✅ hover 시 살짝 밝게 */
+            transform: translateY(-2px);
+        }
+
+        /* ✅ 🔵 비정상 / 주의 상태 */
+        .summary-box.blue {
+            background-color: rgba(255, 255, 255, 0.05); /* ✅ 연한 반투명 배경 유지 */
+            color: white;
+        }
+        .summary-box.blue:hover {
+            background-color: rgba(255, 255, 255, 0.1);  /* ✅ hover 시 살짝 밝게 */
+            transform: translateY(-2px);
+        }
+
+        
+        /* 버튼 공통 스타일 */
+            .custom-btn {
+            background-color: #444;    /* ✅ 배경색 추가 */
+            color: white;
+            padding: 12px 0;
+            min-width: 180px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 10px;
+            box-shadow: none;
+            transition: all 0.3s ease;
+            text-decoration: none !important; /* 밑줄 제거 */
+            text-align: center;
+           
+        }
+
+        /* 마우스 오버 효과 - 더 강하게 */
+        .custom-btn:hover {
+            background-color:#777777;
+            transform: scale(1.05);
+            box-shadow: none;
+         
+            color: white;
+        }
+
+        /* 데스크탑에서 4개 정렬 */
+        .button-container > a {
+            flex: 0 0 22%;
+            max-width: 12%;
+        }
+
+        /* 모바일에서 2개 정렬 */
+        @media (max-width: 576px) {
+            .button-container > a {
+                flex: 0 0 45%;
+                max-width: 45%;
+            }
+        }
+
+        /* 새로운 건강 정보 입력하기 - 강조형 박스 버튼 */
+        .input-box-button {
+            display: inline-block;
+            background-color:#444; 
+            color: white;
+            border: 2px solid white;
+            padding: 10px 20px; 
+            font-size: 15px; 
+            font-weight: 600;
+            border-radius: 12px;
+            box-shadow: 0 3px 8px rgba(255, 255, 255, 0.15);
+            text-decoration: none;
+            transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s;
+        }
+
+        .input-box-button:hover {
+            background-color:#777777;
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+
+    </style>
+</head>
+<body>
+    <!-- ✅ 네비게이션 바 -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="{{ url_for('main.main_page') }}">FinFit</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <a class="nav-link fw-bold" href="http://127.0.0.1:5000/company">About</a></ul>
+        </div>
+      </div>
+    </nav>
+  
+    <!-- ✅ 전체 콘텐츠 컨테이너 -->
+    <div class="container">
+      <div class="text-center fw-bold" style="margin-top: 24px; margin-bottom: 8px;">
+        <h1>질병 예측 결과</h1>
+    </div>
+  
+      <!-- ✅ 그래프 영역 2개씩 나란히 배치 -->
+      <div class="row justify-content-center">
+        {% if graph_html %}
+        <div class="col-12 col-md-6 mb-4">
+          <div class="graph-container">
+            <h2>건강 상태 레이더 차트</h2>
+            {{ graph_html | safe }}
+            {% if radar_status_message %}
+            <div class="summary-box {{ 'success' if '🟢' in radar_status_message else 'blue' }}">
+              {{ radar_status_message }}
+            </div>
+            {% endif %}
+          </div>
+        </div>
+        {% endif %}
+  
+        {% if graph_3d_html %}
+        <div class="col-12 col-md-6 mb-4">
+          <div class="graph-container">
+            <h2>3D 건강 상태 분석</h2>
+            {{ graph_3d_html | safe }}
+            {% if health_status_message %}
+            <div class="summary-box {{ health_status_color }}">
+              {{ health_status_icon }} {{ health_status_message }}
+            </div>
+            {% endif %}
+          </div>
+        </div>
+        {% endif %}
+  
+        {% if disease_graph_html %}
+        <div class="col-12 col-md-6 mb-4">
+          <div class="graph-container"> <!-- 길이고정 <div class="graph-container h-100"> -->
+
+            <h2>유병 확률 그래프</h2>
+            {{ disease_graph_html | safe }}
+            {% if disease_summary_message %}
+            <div class="summary-box blue">
+              {{ disease_summary_message | safe }}
+            </div>
+            {% endif %}
+          </div>
+        </div>
+        {% endif %}
+  
+        {% if cancer_graph_html %}
+        <div class="col-12 col-md-6 mb-4">
+          <div class="graph-container"> <!-- 길이고정 <div class="graph-container h-100"> -->
+
+            <h2>암 위험도 분석</h2>
+            {{ cancer_graph_html | safe }}
+            {% if cancer_status_message %}
+            <div class="summary-box {{ 'success' if '🟢' in cancer_status_message else 'blue' }}">
+              {{ cancer_status_message | safe }}
+            </div>
+            {% endif %}
+          </div>
+        </div>
+        {% endif %}
+      </div>
+  
+    <!-- ✅ 메인 화면 가기 버튼 -->
+    <div class="text-center my-5">
+      <a href="{{ url_for('main.main_page') }}" class="input-box-button">메인 화면 가기</a>
+    </div>
+  
+    <!-- Bootstrap + Chatbot -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {% include 'chatbot.html' %}
+  </body>
+</html>

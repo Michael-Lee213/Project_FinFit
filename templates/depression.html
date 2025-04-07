@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>우울증 예측 및 건강 분석</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    /* 네비게이션 바 스타일 */
+    .navbar {
+        background-color: #fff;
+        padding: 0.8rem 1rem;
+        padding-bottom: 5px;
+    }
+    .navbar .container {
+        max-width: 1140px;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    .navbar-brand {
+        font-weight: bold;
+        font-size: 20px !important;
+        padding-top: 2px;
+        padding-bottom: 2px;
+    }
+    .navbar-nav {
+        gap: 0.75rem;
+    }
+    .navbar-nav .nav-link {
+        padding: 0.5rem 1rem;
+        font-size: 16px !important;
+        font-weight: 500;
+        color: #333 !important;
+        transition: color 0.3s ease;
+        text-align: center;
+    }
+    .navbar-nav .nav-link.fw-bold {
+        font-weight: bold !important;
+    }
+    .navbar-nav .nav-link:hover {
+        color: #007bff !important;
+    }
+    @media (max-width: 991.98px) {
+        .navbar-collapse {
+            background-color: #ffffff;
+            padding: 1rem 0;
+        }
+        .navbar-nav {
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+        .navbar-toggler {
+            padding: 0.25rem 0.75rem;
+        }
+    }
+    /* 기본 페이지 스타일 */
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #121820;
+        color: white;
+        margin: 0;
+        padding-top: 80px;
+        text-align: center;
+    }
+    h1 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin-top: 10px;
+        margin-bottom: 5px;
+    }
+    h2 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 12px;
+        color: white;
+        border-bottom: 2px solid #007bff;
+        display: inline-block;
+        padding-bottom: 5px;
+    }
+    h3 {
+        font-size: 1.1rem;
+        font-weight: 500;
+        margin-bottom: 1rem;
+        color: #ccc;
+    }
+    .options {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        margin: 20px auto;
+    }
+    .option-item {
+        flex: 1 1 150px;
+        max-width: 250px;
+        text-align: center;
+        position: relative;
+        margin: 4px;
+    }
+    .option-item input {
+        display: none;
+    }
+    .option-item label {
+        display: inline-block;
+        width: 100%;
+        padding: 12px 16px;
+        font-size: 15px;
+        font-weight: 600;
+        border-radius: 10px;
+        background-color: #444;
+        color: white;
+        cursor: pointer;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        transition: all 0.3s ease;
+    }
+    .option-item input:checked + label {
+        background-color: #000000;
+        border-color: #ffffff;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(1, 20, 41, 0.25);
+    }
+    .option-item label:hover {
+        background-color: #555;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+    .option-item input:checked + label:hover {
+        background-color: #01172f99;
+    }
+    .submit-button {
+        display: inline-block;
+        background-color: #444;
+        color: white;
+        padding: 12px 24px;
+        min-width: 180px;
+        font-size: 16px;
+        font-weight: 600;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 3px 8px rgba(255, 255, 255, 0.15);
+    }
+    .submit-button:hover:not(:disabled) {
+        background-color: #777777;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+    }
+    .submit-button:active:not(:disabled) {
+        background-color: #333;
+        transform: translateY(0);
+    }
+    .submit-button:disabled {
+        background-color: #2d2d2d;
+        cursor: not-allowed;
+        opacity: 0.5;
+    }
+    .result-container {
+        margin: 40px auto;
+        padding: 30px 0;
+        background-color: rgba(255, 255, 255, 0.02);
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease;
+    }
+    .question-block {
+        margin-bottom: 25px;
+        padding: 15px;
+        background-color: rgba(255, 255, 255, 0.02);
+        border-radius: 10px;
+        transition: background-color 0.3s ease;
+    }
+    .question-block:hover {
+        background-color: rgba(255, 255, 255, 0.05);
+    }
+    .submit-button-wrapper {
+        margin-top: 30px;
+        text-align: center;
+    }
+    .input-box-button {
+        display: inline-block;
+        background-color:#444; 
+        color: white;
+        border: 2px solid white;
+        padding: 10px 20px; 
+        font-size: 15px; 
+        font-weight: 600;
+        border-radius: 12px;
+        box-shadow: 0 3px 8px rgba(255, 255, 255, 0.15);
+        text-decoration: none;
+        transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s;
+    }
+    .input-box-button:hover {
+        background-color:#777777;
+        color: #fff;
+        transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+  <!-- 네비게이션 바 -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="/">FinFit</a>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link fw-bold" href="/company">About</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <h1>우울증 예측 및 건강 분석</h1>
+
+  {% if base_data %}
+  <div class="container result-containerr">
+    <h2>{{ base_data.classification }}</h2>
+    <h3>개인 맞춤형 건강 분석</h3>
+    <div class="chatbot-message">
+      {{ base_data.chatbot_message|safe }}
+    </div>
+  </div>
+  {% else %}
+  <div class="container result-container">
+    <p>데이터를 불러올 수 없습니다. 기본 정보를 입력해주세요.</p>
+  </div>
+  {% endif %}
+
+  <p>좀 더 명확한 우울증을 예측하고 싶다면 평균수면시간과 우울증 설문 조사를 해주세요</p>
+  
+  <!-- 폼 및 결과 영역을 하나의 컨테이너에 배치 -->
+ <div class="container result-container">
+    <form method="POST" id="depression-form">
+      <h2>하루 평균 수면 시간</h2>
+      <h6>평균적으로 하루에 몇시간 자나요? 선택해주세요</h6>
+      <div class="section">
+        <div class="options">
+          <!-- 수면 시간 옵션 -->
+          <div class="option-item">
+            <input type="radio" id="sleep-4" name="sleep" value="4" >
+            <label for="sleep-4">4시간</label>
+          </div>
+          <div class="option-item">
+            <input type="radio" id="sleep-5" name="sleep" value="5" >
+            <label for="sleep-5">5시간</label>
+          </div>
+          <div class="option-item">
+            <input type="radio" id="sleep-6" name="sleep" value="6" >
+            <label for="sleep-6">6시간</label>
+          </div>
+          <div class="option-item">
+            <input type="radio" id="sleep-7" name="sleep" value="7" >
+            <label for="sleep-7">7시간</label>
+          </div>
+          <div class="option-item">
+            <input type="radio" id="sleep-8" name="sleep" value="8" >
+            <label for="sleep-8">8시간</label>
+          </div>
+          <div class="option-item">
+            <input type="radio" id="sleep-9" name="sleep" value="9" >
+            <label for="sleep-9">9시간</label>
+          </div>
+          <div class="option-item">
+            <input type="radio" id="sleep-10" name="sleep" value="10" >
+            <label for="sleep-10">10시간</label>
+          </div>
+          <div class="option-item">
+            <input type="radio" id="sleep-11" name="sleep" value="11" >
+            <label for="sleep-11">11시간</label>
+          </div>
+          <div class="option-item">
+            <input type="radio" id="sleep-12" name="sleep" value="12" >
+            <label for="sleep-12">12시간 이상</label>
+          </div>
+        </div>
+      </div>
+    </div> 
+      
+    {% if base_data and base_data.phq_questions %}
+    <div class="section">
+      <h2>우울증 단계 설문 조사</h2>
+      <h6>아래 문항에 대해 1주일 동안의 기분을 선택해주세요</h6>
+      {% for i in range(1, 10) %}
+      <div class="question-block">
+        <label><strong>{{ i }}. {{ base_data.phq_questions[i-1] }}</strong></label>
+        <div class="options">
+          {% for j in range(4) %}
+          <div class="option-item">
+            <input type="radio" id="phq-{{ i }}-{{ j }}" name="phq-{{ i }}" value="{{ j }}">
+            <label for="phq-{{ i }}-{{ j }}">
+              {% if j == 0 %}없음 (0)
+              {% elif j == 1 %}2~6일 (1)
+              {% elif j == 2 %}7~12일 (2)
+              {% elif j == 3 %}거의 매일 (3)
+              {% endif %}
+            </label>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+            
+
+            <div class="submit-button-wrapper">
+              <button type="submit" class="submit-button">제출하기</button>
+            </div>  
+            
+    <!-- 🔽 제출 후 결과가 나오는 부분 -->
+    <div id="ajax-result" class="result-container" style="display: none;">
+      <h2>우울증 설문 진단 & 수면 분석 결과</h2>
+      <div class="results-wrapper">
+        <div class="classification"></div>
+        <div class="sleep-advice"></div>
+      </div>
+    </div>
+  </form>
+</div>
+
+  <!-- 메인 화면 가기 버튼 -->
+  <div class="text-center my-5">
+    <a href="{{ url_for('main.main_page') }}" class="input-box-button">메인 화면 가기</a>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const form = document.getElementById('depression-form');
+      const resultContainer = document.getElementById('ajax-result');
+      const sleepAdvice = resultContainer.querySelector('.sleep-advice');
+      const classification = resultContainer.querySelector('.classification');
+  
+      if (form) {
+        form.addEventListener('submit', async function(e) {
+          e.preventDefault();
+          if (!validateForm()) return;
+  
+          try {
+            const formData = new FormData(this);
+            resultContainer.style.display = 'block';
+            sleepAdvice.innerHTML = '분석 중...';
+            classification.innerHTML = '분석 중...';
+  
+            const response = await fetch('/depression/ajax_predict', {
+              method: 'POST',
+              body: formData
+            });
+  
+            const data = await response.json();
+  
+            if (data.success) {
+              sleepAdvice.innerHTML = data.sleep_advice;
+              classification.innerHTML = data.classification;
+            } else {
+              throw new Error(data.error || '분석 중 오류가 발생했습니다.');
+            }
+          } catch (error) {
+            console.error('Error:', error);
+            sleepAdvice.innerHTML = '분석 중 오류가 발생했습니다.';
+            classification.innerHTML = '다시 시도해주세요.';
+            alert('서버와 통신 중 오류가 발생했습니다.');
+          }
+        });
+      }
+  
+      function validateForm() {
+        const sleepSelected = document.querySelector('input[name="sleep"]:checked');
+        if (!sleepSelected) {
+          alert('수면 시간을 선택해주세요.');
+          return false;
+        }
+  
+        const phqQuestions = document.querySelectorAll('input[name^="phq-"]');
+        if (phqQuestions.length > 0) {
+          const unansweredQuestions = [];
+          for (let i = 1; i <= 9; i++) {
+            const questionName = `phq-${i}`;
+            const answered = document.querySelector(`input[name="${questionName}"]:checked`);
+            if (!answered) {
+              unansweredQuestions.push(i);
+            }
+          }
+  
+          if (unansweredQuestions.length > 0) {
+            alert(`${unansweredQuestions.join(', ')}번 문항을 선택하지 않았습니다.`);
+            const firstUnanswered = document.querySelector(`input[name="phq-${unansweredQuestions[0]}"]`).closest('.question-block');
+            firstUnanswered.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return false;
+          }
+        }
+  
+        return true;
+      }
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  {% include 'chatbot.html' %}
+</body>
+</html>

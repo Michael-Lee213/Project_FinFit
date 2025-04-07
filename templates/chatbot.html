@@ -1,0 +1,289 @@
+<!-- 🔵 Floating Chatbot UI 최종 완성본 -->
+<style>
+  /* 🔹 애니메이션 효과 */
+  @keyframes fadeSlideUp {
+    0% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+
+  
+  #fitbot-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    border-radius: 30px;
+    padding: 10px 20px;
+    background-color: #444;
+    color: white;
+    font-weight: bold;
+    border: 2px solid rgb(255, 255, 255);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+  }
+  #fitbot-toggle:hover {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    border-radius: 30px;
+    padding: 10px 20px;
+    background-color: #777777;
+    color: white;
+    font-weight: bold;
+    border: 2px solid white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+  }
+
+  #fitbot-chat-container {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 320px;
+    height: 440px;
+    background: rgba(30, 30, 30, 0.92);  /* ✅ 살짝 비치는 어두운 배경 */
+    border-radius: 16px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    display: none;
+    flex-direction: column;
+    z-index: 9998;
+    overflow: hidden;
+    border: none;
+  }
+
+  #fitbot-messages {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    font-size: 14px;
+    background-color:rgba(42, 42, 42, 0.70);
+    display: flex;
+    flex-direction: column;
+  }
+
+  #fitbot-input-container {
+    display: flex;
+    border-top: 1px solid #eee;
+    background: white;
+    border-radius: 16px;
+  }
+
+  #fitbot-input {
+    flex: 1;
+    border: none;                 /* ✅ 테두리 제거! */
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 16px;
+  }
+
+  #fitbot-input:focus {
+    outline: none;       /* ✅ 파란 외곽선 제거 */
+    border: none;        /* ✅ 테두리 완전 제거 */
+    box-shadow: none;    /* ✅ 브라우저가 넣는 효과 제거 */
+  }
+  
+
+  #fitbot-send {
+    background:gray;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 16px;
+  }
+
+  /* 말풍선 공통 스타일 */
+  .fitbot-bubble {
+    margin: 5px 0;
+    padding: 8px 12px;
+    border-radius: 12px;
+    max-width: 85%;
+    word-break: break-word;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    
+    /* ✅ 애니메이션 추가 */
+    animation: fadeSlideUp 0.3s ease-out;
+  }
+
+  .fitbot-user {
+    background-color:#008b8b;
+    align-self: flex-end;
+    text-align: right;
+    position: relative;
+    color: white;
+  }
+
+  .fitbot-user::after {
+    content: "";
+    position: absolute;
+    right: -6px;
+    top: 12px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid#008b8b;
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+  }
+
+  .fitbot-bot {
+    background-color:#3b3b3b;
+    align-self: flex-start;
+    text-align: left;
+    position: relative;
+    color: white;
+  }
+
+  .fitbot-bot::after {
+    content: "";
+    position: absolute;
+    left: -6px;
+    top: 12px;
+    width: 0;
+    height: 0;
+    border-right: 8px solid #3b3b3b;
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+  }
+
+  /* 발신자 라벨 + 전체 묶음 */
+  .fitbot-message-wrapper {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+  }
+
+  .fitbot-message-wrapper.user .fitbot-sender {
+    text-align: right;
+    padding-right: 6px;
+  }
+
+  .fitbot-message-wrapper.bot .fitbot-sender {
+    text-align: left;
+    padding-left: 6px;
+  }
+
+  .fitbot-sender {
+    font-size: 13px;
+    font-weight: bold;
+    color: #ffffff;
+    margin-bottom: 2px;
+  }
+
+  @media (max-width: 768px) {
+    #fitbot-chat-container {
+      width: 50vw;              /* ✅ 화면 너비의 90% */
+      height: 30vh;             /* ✅ 높이는 화면의 60% 정도 */
+      right: 3vw;               /* ✅ 오른쪽 여백 */
+      bottom: 70px;            /* ✅ 하단 여백 (전송 버튼과 겹치지 않게) */
+    }
+  
+    #fitbot-toggle {
+      bottom: 20px;
+      right: 20px;
+      padding: 8px 16px;
+      font-size: 14px;
+    }
+  
+    #fitbot-input {
+      font-size: 13px;
+      padding: 8px;
+    }
+  
+    #fitbot-send {
+      font-size: 13px;
+      padding: 8px 12px;
+    }
+  }
+</style>
+
+<!-- 🟦 Toggle Button -->
+<button id="fitbot-toggle">Fit봇</button>
+
+<!-- 💬 Chatbot Box -->
+<div id="fitbot-chat-container">
+  <div id="fitbot-messages"></div>
+  <div id="fitbot-input-container">
+    <input id="fitbot-input" type="text" placeholder="메시지를 입력하세요..." />
+    <button id="fitbot-send">전송</button>
+  </div>
+</div>
+
+<!-- ✅ JS Logic -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const toggleBtn = document.getElementById('fitbot-toggle');
+  const chatContainer = document.getElementById('fitbot-chat-container');
+  const input = document.getElementById('fitbot-input');
+  const sendBtn = document.getElementById('fitbot-send');
+  const messages = document.getElementById('fitbot-messages');
+
+  // 현재 페이지 파악
+  const path = window.location.pathname;
+  const page = path.includes("disease") ? "disease"
+             : path.includes("squat") ? "squat"
+             : path.includes("hospital") ? "hospital"
+             : path.includes("exercise") ? "exercise"
+             : path.includes("depression") ? "depression"
+             : path.includes("customer") ? "customer"
+             : "main";
+
+  toggleBtn.addEventListener('click', () => {
+    const isVisible = chatContainer.style.display === 'flex';
+    chatContainer.style.display = isVisible ? 'none' : 'flex';
+
+    // 인사말은 한 번만
+    if (!isVisible && messages.children.length === 0) {
+      appendMessage('Fit봇', `안녕하세요! 건강도우미 Fit봇이에요. '${page}' 페이지에 오신 것을 환영합니다. 무엇을 도와드릴까요?`, 'fitbot-bot');
+    }
+  });
+
+  sendBtn.addEventListener('click', sendMessage);
+  input.addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') sendMessage();
+  });
+
+  function sendMessage() {
+    const userMsg = input.value.trim();
+    if (!userMsg) return;
+
+    appendMessage('사용자', userMsg, 'fitbot-user');
+    input.value = '';
+
+    fetch('/chatbot', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: userMsg, page: page })
+    })
+    .then(res => res.json())
+    .then(data => appendMessage('Fit봇', data.reply, 'fitbot-bot'))
+    .catch(err => appendMessage('Fit봇', '오류가 발생했어요. 다시 시도해 주세요.', 'fitbot-bot'));
+  }
+
+  function appendMessage(sender, text, className) {
+    const wrapper = document.createElement('div');
+    wrapper.className = `fitbot-message-wrapper ${className.includes('user') ? 'user' : 'bot'}`;
+
+    const senderLabel = document.createElement('div');
+    senderLabel.className = 'fitbot-sender';
+    senderLabel.textContent = sender;
+
+    const msg = document.createElement('div');
+    msg.className = 'fitbot-bubble ' + className;
+    msg.textContent = text;
+
+    wrapper.appendChild(senderLabel);
+    wrapper.appendChild(msg);
+    messages.appendChild(wrapper);
+    messages.scrollTop = messages.scrollHeight;
+  }
+});
+</script>
