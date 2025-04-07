@@ -4,7 +4,6 @@
 
 <img src="https://github.com/Michael-Lee213/Project_FinFit/raw/main/FinFit-Chrome2025-04-0213-57-31-ezgif.com-video-to-gif-converter.gif.gif" width="720"/>
 
-
 # ■ FinFit - 개인 맞춤형 헬스케어 서비스 
 
 FinFit은 건강 검진 데이터와 AI 예측 모델을 활용하여 사용자의 건강 상태를 정밀 분석하고 맞춤형 솔루션을 제공하는 스마트 헬스케어 서비스를 제공합니다. 또한, 바쁜 현대인을 위해 생활 습관 개선부터 병원 연계까지 체계적인 건강 관리 시스템을 제공하여, 누구나 쉽게 건강을 유지하고 더 나은 미래를 준비할 수 있도록 지원합니다. <br>
@@ -21,7 +20,6 @@ FinFit은 건강 검진 데이터와 AI 예측 모델을 활용하여 사용자�
       <td>개발 기간</td>
       <td>
         2025년 2월 24일(월) ~ 2025년 4월 1일(화)
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       </td>
     </tr>
     <tr>
@@ -32,7 +30,6 @@ FinFit은 건강 검진 데이터와 AI 예측 모델을 활용하여 사용자�
         - 체형 분석을 통한 건강 맞춤 운동 솔루션 제공<br>
         - 검진 데이터 기반 우울증 예측 및 맞춤 정보 제공<br>
         - AI 분석을 통한 정확한 운동 자세 교정 서비스
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       </td>
     </tr>
   </tbody>
@@ -54,35 +51,35 @@ FinFit은 건강 검진 데이터와 AI 예측 모델을 활용하여 사용자�
   <tr>
     <td style="width: 20%; padding: 10px; vertical-align: middle;">
       <div>
-        <img src="C:\project\finfit\static\images\image.png" alt="이한세" width="160" height="200"><br><br>
+        <img src="https://raw.githubusercontent.com/Michael-Lee213/finfit/main/static/images/image.png" alt="이한세" width="160" height="200"><br><br>
         <strong>이한세 (Michael)</strong><br>
         <em style="color:#f0a500;"># Squat Analysis</em>
       </div>
     </td>
     <td style="width: 20%; padding: 10px; vertical-align: middle;">
       <div>
-        <img src="image1.png" alt="김미경" width="160" height="200"><br><br>
+        <img src="https://raw.githubusercontent.com/Michael-Lee213/finfit/main/static/images/image1.png" alt="김미경" width="160" height="200"><br><br>
         <strong>김미경 (Mia)</strong><br>
         <em style="color:#f0a500;"># Body & Workout</em>
       </div>
     </td>
     <td style="width: 20%; padding: 10px; vertical-align: middle;">
       <div>
-        <img src="image3.png" alt="이준혁" width="160" height="200"><br><br>
+        <img src="https://raw.githubusercontent.com/Michael-Lee213/finfit/main/static/images/image3.png" alt="이준혁" width="160" height="200"><br><br>
         <strong>이준혁 (Simon)</strong><br>
         <em style="color:#f0a500;"># Disease Risk</em>
       </div>
     </td>
     <td style="width: 20%; padding: 10px; vertical-align: middle;">
       <div>
-        <img src="image5.png" alt="하연우" width="160" height="200"><br><br>
+        <img src="https://raw.githubusercontent.com/Michael-Lee213/finfit/main/static/images/image5.png" alt="하연우" width="160" height="200"><br><br>
         <strong>하연우 (Woo)</strong><br>
         <em style="color:#f0a500;"># Mental Health </em>
       </div>
     </td>
     <td style="width: 20%; padding: 10px; vertical-align: middle;">
       <div>
-        <img src="image4.png" alt="이기성" width="160" height="200"><br><br>
+        <img src="https://raw.githubusercontent.com/Michael-Lee213/finfit/main/static/images/image4.png" alt="이기성" width="160" height="200"><br><br>
         <strong>이기성 (Bradley)</strong><br>
         <em style="color:#f0a500;"># Hospital Match</em>
       </div>
