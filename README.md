@@ -182,6 +182,21 @@ FinFit은 건강 검진 데이터와 AI 예측 모델을 활용하여 사용자�
 - 무릎 각도 측정 및 반복 수 카운트
 <img src="https://github.com/Michael-Lee213/Project_FinFit/raw/main/KakaoTalk_20250402_182621565.gif" width="720"/>
 
+![image](https://github.com/user-attachments/assets/54e7ca7e-441d-46e9-968d-8ae54b22df2c)
+
+- 사용자의 Squat 운동 자세를 실시간으로 분석하고 시각적 피드백을 제공하는 시스템입니다. 웹 캠 또는 동영상 업로드를 통해 사용자의 관절 위치를 추적하고, 무릎 각도와 골반, 척추 정렬 등을 평가합니다.
+- 스쿼트 자세 분석은 Google Mediapipe의 포즈 인식 모델을 기반으로, 사용자의 33개 관절 위치를 실시간으로 추적합니다. 분석의 경우, calculate_angle()을 비롯해get_landmark_angle(), get_distance() 등의 보조 함수가 사용되며
+  무릎, 엉덩이, 어깨 등 주요 관절 간의 각도와 거리를 정밀하게 계산합니다. 좌우 무릎 각도의 평균값을 바탕으로 스쿼트의 깊이를 판별하고, 골반 접힘(Hip Hinge), 무릎 정렬, 척추 기울기, 팔 위치 등 총 10가지 항목을 기준으로 매 프레임마다
+  사용자의 자세를 평가합니다. 기준을 충족하지 못할 경우에는 오류 메시지가 즉시 화면 상단에 표시되며, 예를 들어 무릎이 발끝보다 지나치게 앞으로 나가면 “Knee far forward”, 엉덩이가 과도하게 뒤로 빠지면 “Excessive hip hinge”와 같은 피드백이 제공됩니다.
+  분석 결과는 텍스트와 게이지 바 형태로 실시간 표시되며, 반복된 오류는 자동으로 집계되어 Gemini AI에 전달됩니다. Gemini AI는 RAG(Retrieval-Augmented Generation) 방식을 통해 핵심 문제를 요약하고, 사용자 맞춤형 피드백을 생성합니다. 최종 피드백은 시각적 안내와 음성 출력으로 제공되며, 사용자의 자세 교정과 반복 학습을 효과적으로 지원합니다.
+
+- 예시 화면 
+
+![image](https://github.com/user-attachments/assets/7b950414-caf5-401f-8ba5-3925182fa9df)
+
+
+
+
 ## ■ Service Flow Diagram
 
 <img src="https://raw.githubusercontent.com/Michael-Lee213/finfit/main/static/images/사용자흐름도(최종).png" alt="FinFit 사용자 흐름도" width="700">
