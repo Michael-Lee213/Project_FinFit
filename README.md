@@ -182,7 +182,7 @@ FinFit은 건강 검진 데이터와 AI 예측 모델을 활용하여 사용자�
 - 무릎 각도 측정 및 반복 수 카운트
 <img src="https://github.com/Michael-Lee213/Project_FinFit/raw/main/KakaoTalk_20250402_182621565.gif" width="720"/>
 
-![image](https://github.com/user-attachments/assets/d2abd802-971d-4334-86d2-9cf6444efcf7)
+![image](https://github.com/user-attachments/assets/2a5ca5a7-0291-43e4-9ab6-f6cb8728dc0e)
 
 - 사용자의 Squat 운동 자세를 실시간으로 분석하고 시각적 피드백을 제공하는 시스템입니다. 웹 캠 또는 동영상 업로드를 통해 사용자의 관절 위치를 추적하고, 무릎 각도와 골반, 척추 정렬 등을 평가합니다.
 - 스쿼트 자세 분석은 Google Mediapipe의 포즈 인식 모델을 기반으로, 사용자의 33개 관절 위치를 실시간으로 추적합니다. 분석의 경우, calculate_angle()을 비롯해get_landmark_angle(), get_distance() 등의 보조 함수가 사용되며
