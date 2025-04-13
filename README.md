@@ -149,35 +149,7 @@ FinFit은 건강 검진 데이터와 AI 예측 모델을 활용하여 사용자�
 
 ## ■ 기능 구현 
 
-### 1. 질병 예측 페이지
-- 건강검진 데이터 기반 질병 확률 예측
-- 2D/3D 시각화 + 암 리스크 분석 포함
-<img src="https://github.com/Michael-Lee213/Project_FinFit/raw/main/KakaoTalk_20250402_172703733.gif" width="720"/>
-
----
-
-### 2. 병원 추천 시스템
-- 지역 기반 병원 자동 매칭
-- 조건 만족 시 내과 병원 5곳 추천
-<img src="https://github.com/Michael-Lee213/finfit/raw/main/asdfasdfsdfasdfsadfsdf.gif" width="720"/>
-
----
-
-### 3. 우울증 예측 
-- 건강정보 기반 정신건강 분석
-- PHQ-9 설문과 수면시간, 건강 데이터 기반으로 우울증 단계 예측
-<img src="https://github.com/Michael-Lee213/finfit/raw/main/KakaoTalk_20250402_182621565_02.gif" width="720"/>
-
----
-
-### 4. 체형 예측 및 운동 추천
-- 체형 예측 (RandomForest 기반)
-- 운동 목적/난이도별 추천 영상 필터링
-<img src="https://github.com/Michael-Lee213/finfit/raw/main/KakaoTalk_20250402_182621565_01.gif" width="720"/>
-
----
-
-### 5. 스쿼트 분석 페이지
+### 스쿼트 분석 페이지
 - Mediapipe 기반 실시간 자세 추적
 - 무릎 각도 측정 및 반복 수 카운트
 <img src="https://github.com/Michael-Lee213/finfit/raw/main/KakaoTalk_20250402_182621565.gif" width="720"/>
