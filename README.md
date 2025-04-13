@@ -148,11 +148,8 @@ FinFit은 건강 검진 데이터와 AI 예측 모델을 활용하여 사용자�
 ![venv](https://img.shields.io/badge/venv-3C3C3C?style=flat&logo=python&logoColor=white)
 
 
-## ■ 기능 구현 
+## ■ 스쿼트 분석 페이지
 
-### - 스쿼트 분석 페이지
-- Mediapipe 기반 실시간 자세 추적
-- 무릎 각도 측정 및 반복 수 카운트
 <img src="https://github.com/Michael-Lee213/finfit/raw/main/KakaoTalk_20250402_182621565.gif" width="720"/>
 
 ![image](https://github.com/user-attachments/assets/2a5ca5a7-0291-43e4-9ab6-f6cb8728dc0e)
