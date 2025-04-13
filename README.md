@@ -1,4 +1,6 @@
-<small>
+# ■ 프로젝트명: FinFit
+
+<img src="https://github.com/Michael-Lee213/Project_FinFit/raw/main/FinFit-Chrome2025-04-0213-57-31-ezgif.com-video-to-gif-converter.gif.gif" width="720"/>
 
 # ■ FinFit - 개인 맞춤형 헬스케어 서비스 
 
@@ -96,8 +98,7 @@ FinFit은 건강 검진 데이터와 AI 예측 모델을 활용하여 사용자�
 
 ## ■  프로젝트 진행 관리 
 
-![image](https://github.com/user-attachments/assets/f666eee0-b450-46eb-9e74-70cfb49e763c)
-
+![image](https://github.com/user-attachments/assets/7a16587a-5eb2-4be4-bfa9-fa67d59f96f1)
 
 ## ■ Stacks 
 
@@ -144,8 +145,38 @@ FinFit은 건강 검진 데이터와 AI 예측 모델을 활용하여 사용자�
 ![venv](https://img.shields.io/badge/venv-3C3C3C?style=flat&logo=python&logoColor=white)
 
 
-## ■ 스쿼트 분석 페이지
+## ■ 기능 구현 
 
+### 1. 질병 예측 페이지
+- 건강검진 데이터 기반 질병 확률 예측
+- 2D/3D 시각화 + 암 리스크 분석 포함
+<img src="https://github.com/Michael-Lee213/Project_FinFit/raw/main/KakaoTalk_20250402_172703733.gif" width="720"/>
+
+---
+
+### 2. 병원 추천 시스템
+- 지역 기반 병원 자동 매칭
+- 조건 만족 시 내과 병원 5곳 추천
+<img src="https://github.com/Michael-Lee213/Project_FinFit/raw/main/asdfasdfsdfasdfsadfsdf.gif" width="720"/>
+
+---
+
+### 3. 우울증 예측 
+- 건강정보 기반 정신건강 분석
+- PHQ-9 설문과 수면시간, 건강 데이터 기반으로 우울증 단계 예측
+<img src="https://github.com/Michael-Lee213/Project_FinFit/raw/main/KakaoTalk_20250402_182621565_02.gif" width="720"/>
+
+---
+
+### 4. 체형 예측 및 운동 추천
+- 체형 예측 (RandomForest 기반)
+- 운동 목적/난이도별 추천 영상 필터링
+<img src="https://github.com/Michael-Lee213/Project_FinFit/raw/main/KakaoTalk_20250402_182621565_01.gif" width="720"/>
+
+---
+### 5. 스쿼트 분석 페이지
+- Mediapipe 기반 실시간 자세 추적
+- 무릎 각도 측정 및 반복 수 카운트
 <img src="https://github.com/Michael-Lee213/finfit/raw/main/KakaoTalk_20250402_182621565.gif" width="720"/>
 
 ![image](https://github.com/user-attachments/assets/2a5ca5a7-0291-43e4-9ab6-f6cb8728dc0e)
